@@ -1,29 +1,28 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
-<link rel="manifest" href="manifest.json">
 
-<meta name="theme-color" content="#102544">
+<head>
 
-<link rel="apple-touch-icon" href="icon-192.png">
- <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>RONA Studio</title>
 
 <link rel="stylesheet" href="stile.css">
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#102544">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="favicon.png">
 
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 </head>
-<script>
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js');
-}
-</script>
+
 <body>
-    
+
 <div class="bg1"></div>
 <div class="bg2"></div>
 
@@ -73,18 +72,11 @@ if ('serviceWorker' in navigator) {
 کپی شماره
 </button>
 
-<h3>
-
-آدرس
-
-</h3>
+<h3>آدرس</h3>
 
 <p>
-
-ابتدای خیابان دفتری غربی
-
+ابتدای خیابان دفتری غربی<br>
 قبل از عینک چشمک
-
 </p>
 
 </div>
@@ -92,6 +84,12 @@ if ('serviceWorker' in navigator) {
 </div>
 
 <script src="script.js"></script>
+
+<script>
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js");
+}
+</script>
 
 </body>
 
