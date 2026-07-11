@@ -6,16 +6,15 @@ font-family:'Vazirmatn',sans-serif;
 }
 
 body{
-background:#f8f9fb;
-overflow-x:hidden;
-min-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-padding:30px;
-position:relative;
+body{
+    background:
+    linear-gradient(rgba(255,255,255,0.75), rgba(255,255,255,0.75)),
+    url("IMG_0941.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
-
 .bg1{
 position:fixed;
 width:50px;
