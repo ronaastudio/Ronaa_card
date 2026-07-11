@@ -155,7 +155,11 @@ grid-template-columns:1fr;
 }
 
 .logo{
-width:20px;
+.logo{
+    width:40px !important;
+    height:auto;
+    display:block;
+    margin:0 auto 20px;
 }
 
 h1{
