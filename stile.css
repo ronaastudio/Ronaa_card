@@ -6,15 +6,22 @@ font-family:'Vazirmatn',sans-serif;
 }
 
 body{
-body{
-    background:
-    linear-gradient(rgba(255,255,255,0.75), rgba(255,255,255,0.75)),
-    url("IMG_0941.jpeg");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+padding:20px;
+
+background:
+linear-gradient(rgba(255,255,255,.78),rgba(255,255,255,.78)),
+url("IMG_0941.jpeg");
+
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
+background-attachment:fixed;
 }
+
 .bg1{
 position:fixed;
 width:350px;
@@ -25,6 +32,7 @@ top:-120px;
 left:-120px;
 filter:blur(40px);
 opacity:.12;
+z-index:-1;
 }
 
 .bg2{
@@ -37,12 +45,14 @@ bottom:-100px;
 right:-100px;
 filter:blur(50px);
 opacity:.15;
+z-index:-1;
 }
 
 .card{
 width:100%;
 max-width:430px;
-background:white;
+background:rgba(255,255,255,.92);
+backdrop-filter:blur(10px);
 border-radius:28px;
 padding:35px 25px;
 box-shadow:0 15px 45px rgba(0,0,0,.12);
@@ -51,8 +61,10 @@ animation:fade .7s ease;
 }
 
 .logo{
-width:140px;
-margin-bottom:20px;
+width:100px;
+height:auto;
+display:block;
+margin:0 auto 20px;
 }
 
 h1{
@@ -62,7 +74,7 @@ margin-bottom:8px;
 }
 
 .slogan{
-color:#777;
+color:#666;
 margin-bottom:30px;
 font-size:15px;
 }
@@ -91,7 +103,7 @@ margin-left:8px;
 
 .btn:hover{
 background:#ff8c22;
-transform:translateY(-4px);
+transform:translateY(-3px);
 }
 
 .info h3{
@@ -122,23 +134,20 @@ transform:scale(1.05);
 }
 
 @keyframes fade{
-
 from{
 opacity:0;
 transform:translateY(30px);
 }
-
 to{
 opacity:1;
 transform:translateY(0);
 }
-
 }
 
 @media(max-width:500px){
 
 .card{
-padding:30px 20px;
+padding:25px 18px;
 }
 
 .buttons{
@@ -146,7 +155,7 @@ grid-template-columns:1fr;
 }
 
 .logo{
-width:20px;
+width:90px;
 }
 
 h1{
