@@ -92,7 +92,7 @@ document.getElementById("cardBox").style.display="block";
 
 function copyCard(){
 
-const card="6104338901793105";
+const card="6063731135919406";
 
 navigator.clipboard.writeText(card);
 
