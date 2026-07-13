@@ -57,8 +57,8 @@
 <i class="fa-solid fa-location-dot"></i>
 مسیریابی
 </a>
-<a href="#" class="btn" onclick="openPayment();return false;">
-<i class="fa-solid fa-wallet"></i>
+<a href="#" class="btn" onclick="openPayment()">
+<i class="fa-solid fa-credit-card"></i>
 پرداخت بیعانه
 </a>
 </div>
@@ -85,63 +85,51 @@
 </div>
 
 </div>
-<div id="paymentModal" class="payment-modal">
+<div id="paymentModal" class="modal">
 
-<div class="payment-box">
-
-<img src="logo.png" class="payment-logo">
+<div class="modal-content">
 
 <h2>پرداخت بیعانه</h2>
 
-<p class="payment-text">
-لطفاً فقط پس از هماهنگی با استودیو، بیعانه را پرداخت نمایید.
+<p class="pay-text">
+لطفاً ابتدا با استودیو هماهنگ کنید.
 </p>
 
-<div class="payment-option" onclick="showCard()">
+<button class="pay-btn" onclick="showCard()">
+💳 کارت به کارت
+</button>
 
-<i class="fa-solid fa-credit-card"></i>
+<a href="#" class="pay-btn">
+🔗 پرداخت با لینک
+</a>
 
-<span>کارت به کارت</span>
+<div id="cardBox" style="display:none">
 
-</div>
+<h3>شماره کارت</h3>
 
-<div id="cardSection">
-
-<div class="bank-card">
-
-<div class="bank-title">
-بانک ملت
-</div>
-
-<div class="bank-number" id="cardNumber">
+<p id="cardNumber">
 6104 3389 0179 3105
-</div>
+</p>
 
-<div class="bank-owner">
-مائده کردیان
-</div>
+<p>
+به نام <strong>مائده کردیان</strong>
+</p>
 
-<button class="copy-btn" onclick="copyCard()">
+<button onclick="copyCard()">
 📋 کپی شماره کارت
 </button>
 
 <a
-class="receipt-btn"
-href="https://wa.me/989211027647?text=سلام،%20بیعانه%20را%20واریز%20کردم.%20رسید%20را%20ارسال%20می‌کنم."
->
-
-📤 ارسال رسید پرداخت
-
+href="https://wa.me/989211027647"
+class="pay-btn"
+style="margin-top:15px;display:block;text-align:center;">
+ارسال رسید پرداخت
 </a>
 
 </div>
 
-</div>
-
-<button class="closePayment" onclick="closePayment()">
-
+<button class="close-btn" onclick="closePayment()">
 بستن
-
 </button>
 
 </div>
