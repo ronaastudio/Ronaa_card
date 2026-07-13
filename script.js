@@ -77,3 +77,24 @@ END:VCARD`;
 };
 
 document.querySelector(".info").appendChild(contactButton);
+function openPayment(){
+document.getElementById("paymentModal").style.display="flex";
+}
+
+function closePayment(){
+document.getElementById("paymentModal").style.display="none";
+document.getElementById("cardBox").style.display="none";
+}
+
+function showCard(){
+document.getElementById("cardBox").style.display="block";
+}
+
+function copyCard(){
+
+const card="6104338901793105";
+
+navigator.clipboard.writeText(card);
+
+alert("✅ شماره کارت کپی شد");
+}
