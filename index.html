@@ -57,7 +57,12 @@
 <i class="fa-solid fa-location-dot"></i>
 مسیریابی
 </a>
-
+    
+<a href="#" class="btn" onclick="openPayment()">
+<i class="fa-solid fa-credit-card"></i>
+پرداخت بیعانه
+</a>
+    
 </div>
 
 <div class="info">
@@ -83,6 +88,57 @@
 
 </div>
 
+<div id="paymentModal" class="modal">
+
+<div class="modal-content">
+
+<h2>پرداخت بیعانه</h2>
+
+<p class="pay-text">
+لطفاً ابتدا با استودیو هماهنگ کنید.
+</p>
+
+<button class="pay-btn" onclick="showCard()">
+💳 کارت به کارت
+</button>
+
+<a href="#" class="pay-btn">
+🔗 پرداخت با لینک
+</a>
+
+<div id="cardBox" style="display:none">
+
+<h3>شماره کارت</h3>
+
+<p id="cardNumber">
+6104 3389 0179 3105
+</p>
+
+<p>
+به نام <strong>مائده کردیان</strong>
+</p>
+
+<button onclick="copyCard()">
+📋 کپی شماره کارت
+</button>
+
+<a
+href="https://wa.me/989211027647"
+class="pay-btn"
+style="margin-top:15px;display:block;text-align:center;">
+ارسال رسید پرداخت
+</a>
+
+</div>
+
+<button class="close-btn" onclick="closePayment()">
+بستن
+</button>
+
+</div>
+
+</div>
+    
 <script src="script.js"></script>
 
 <script>
