@@ -227,3 +227,26 @@ letter-spacing:2px;
 margin:15px 0;
 color:#102544;
 }
+function openPayment(){
+    document.getElementById("paymentModal").style.display="flex";
+}
+
+
+function closePayment(){
+    document.getElementById("paymentModal").style.display="none";
+}
+
+
+function showCard(){
+    document.getElementById("cardSection").style.display="block";
+}
+
+
+function copyCard(){
+
+    const card = "6104338901793105";
+
+    navigator.clipboard.writeText(card);
+
+    alert("شماره کارت کپی شد ✅");
+}
