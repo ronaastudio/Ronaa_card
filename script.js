@@ -41,6 +41,18 @@ copyCardBtn.addEventListener('click', () => {
 });
 
 /* ============================================
+   GALLERY TOGGLE
+   ============================================ */
+const galleryWrap = document.getElementById('galleryWrap');
+const toggleGalleryBtn = document.getElementById('toggleGallery');
+toggleGalleryBtn.addEventListener('click', () => {
+  const isOpen = galleryWrap.classList.toggle('open');
+  toggleGalleryBtn.innerHTML = isOpen
+    ? '<i class="fa-solid fa-eye-slash"></i> بستن گالری'
+    : '<i class="fa-solid fa-images"></i> مشاهده گالری';
+});
+
+/* ============================================
    GALLERY LIGHTBOX (aperture reveal)
    ============================================ */
 const lightbox = document.getElementById('lightbox');
