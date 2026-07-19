@@ -180,6 +180,16 @@ body{
 /* ============================================
    GALLERY
    ============================================ */
+.gallery-toggle-wrap{ text-align:center; margin-bottom:6px; }
+.gallery-toggle-wrap .btn{ display:inline-flex; width:auto; padding:14px 28px; }
+
+.gallery-wrap{
+  max-height:0;
+  overflow:hidden;
+  transition: max-height .6s ease;
+}
+.gallery-wrap.open{ max-height:2000px; margin-top:20px; }
+
 .gallery-grid{
   display:grid;
   grid-template-columns: repeat(2, 1fr);
