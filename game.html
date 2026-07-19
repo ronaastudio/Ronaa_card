@@ -64,7 +64,8 @@
     opacity:0; transition:opacity .1s;
   }
   .outfit {
-    width:82%; height:36vw; max-height:180px; min-height:86px; clip-path:polygon(32% 0%, 68% 0%, 100% 26%, 82% 100%, 18% 100%, 0% 26%);
+    width:82%; height:36vw; max-height:180px; min-height:86px;
+    clip-path:polygon(32% 0%, 68% 0%, 100% 26%, 82% 100%, 18% 100%, 0% 26%);
     box-shadow:0 8px 18px rgba(0,0,0,0.35); position:relative; z-index:1;
   }
   .outfit.suit { clip-path:polygon(28% 0%, 72% 0%, 96% 22%, 88% 100%, 12% 100%, 4% 22%); }
@@ -73,9 +74,6 @@
   .outfit.c-purple { background:linear-gradient(#9b6fe0,#5e3aa8); }
   .outfit.c-red { background:linear-gradient(#ff5c72,#c81f3d); }
   .outfit.c-teal { background:linear-gradient(#33bfae,#1c7d70); }
-
-  .outfit.c-white.c-bride { background:linear-gradient(#fff,#f3e9ff); }
-  .outfit.c-black.c-groom { background:linear-gradient(#2c2c3a,#15151f); }
 
   .tie { position:absolute; top:20%; left:50%; transform:translateX(-50%); width:9%; height:52%;
     clip-path:polygon(20% 0%,80% 0%,100% 14%,50% 100%,0% 14%); z-index:2; }
@@ -122,7 +120,7 @@
     background:linear-gradient(90deg,#ffd6f0,#ffe14a,#c9a8ff);
     -webkit-background-clip:text; background-clip:text; color:transparent; }
   .subtitle { font-size:14px; opacity:.85; max-width:300px; line-height:1.8; }
-  input.nameInput, input.codeInput { font-size:18px; padding:10px 16px; border-radius:14px; border:none; text-align:center; }
+  input.nameInput, input.codeInput { font-size:18px; padding:10px 16px; border-radius:14px; border:none; text-align:center; width:220px; }
   button.btn {
     padding:14px 34px; font-size:17px; font-weight:bold; border:none; border-radius:28px; cursor:pointer;
     background:linear-gradient(90deg,#ff8ab0,#c9a8ff); color:#2b1f3d; box-shadow:0 6px 18px rgba(200,150,255,0.5);
@@ -135,9 +133,13 @@
   .board .row:last-child{ border-bottom:none; }
   .board .row b { color:#ffe14a; }
   .codeBox { background:rgba(255,255,255,.12); border-radius:10px; padding:8px 16px; font-family:monospace; font-size:18px; letter-spacing:2px; }
+  .backLink { position:fixed; top:14px; left:14px; z-index:50; color:#fff; text-decoration:none; font-size:13px;
+    background:rgba(0,0,0,0.32); padding:6px 12px; border-radius:20px; }
 </style>
 </head>
 <body>
+
+<a href="index.html" class="backLink">← بازگشت به سایت</a>
 
 <div id="app">
   <div class="hallSky"></div>
@@ -164,7 +166,7 @@
 
   <div id="nameScreen" class="overlay">
     <div class="title">شکار لحظه‌ها 📸</div>
-    <div class="subtitle">عروس‌وداماد و مهمون‌ها هر از گاهی یه لبخند یا شکلک بامزه درمیارن، فقط برای یه لحظه کوتاه! درست همون لحظه لمسشون کن تا عکسشون رو شکار کنی.<br><br>⚠️ حواست باشه: بعضی وقتا یکی‌شون گوشیش رو درمیاره و می‌خواد از شما عکس بگیره (🤳) — اگه اون رو لمس کنی امتیاز از دست می‌دی!</div>
+    <div class="subtitle">عروس‌وداماد و مهمون‌ها هر از گاهی یه لبخند یا شکلک بامزه درمیارن، فقط برای نیم‌ثانیه! درست همون لحظه لمسشون کن تا عکسشون رو شکار کنی.<br><br>⚠️ حواست باشه: بعضی وقتا یکی‌شون گوشیش رو درمیاره و می‌خواد از شما عکس بگیره (🤳) — اگه اون رو لمس کنی امتیاز از دست می‌دی!</div>
     <input class="nameInput" id="nameInput" placeholder="اسمت رو بنویس" maxlength="16" />
     <button class="btn" id="startBtn">شروع شکار 🎬</button>
   </div>
@@ -181,8 +183,8 @@
 
   <div id="adminScreen" class="overlay hidden">
     <div class="title" style="font-size:22px;">تایید کد شکار لحظه‌ها</div>
-    <div class="subtitle">کدی که مهمون برات فرستاده رو اینجا بزن تا مطابقتش با ثبت واقعی رو ببینی</div>
-    <input class="codeInput" id="adminCodeInput" placeholder="مثلاً A1B2C3" maxlength="8" />
+    <div class="subtitle">کدی که مهمون برات فرستاده رو اینجا بزن تا امتیاز و زمان واقعیش رو ببینی</div>
+    <input class="codeInput" id="adminCodeInput" placeholder="مثلاً A1B2C3D" maxlength="10" />
     <button class="btn" id="adminCheckBtn">بررسی کن</button>
     <div id="adminResult" class="subtitle" style="color:#ffe14a;"></div>
   </div>
@@ -192,8 +194,8 @@
 (function(){
   const CHARS = [
     { id:'guest1', label:'مهمون', outfit:'suit c-purple', tie:'gold' },
-    { id:'bride', label:'عروس', outfit:'c-white c-bride', veil:true },
-    { id:'groom', label:'داماد', outfit:'suit c-black c-groom', bowtie:true },
+    { id:'bride', label:'عروس', outfit:'c-white', veil:true },
+    { id:'groom', label:'داماد', outfit:'suit c-black', bowtie:true },
     { id:'guest2', label:'مهمون', outfit:'c-red' },
     { id:'guest3', label:'مهمون', outfit:'suit c-teal', tie:'silver' },
   ];
@@ -201,8 +203,9 @@
   const FLASH_FACES = ['😄','😆','😜','😲','🤩'];
   const PHONE_CHANCE = 0.24;
   const ROUND_SECONDS = 40;
-  const FLASH_DURATION_MS = 600;
+  const FLASH_DURATION_MS = 700;
   const MEDAL_THRESHOLD = 30;
+  const LB_KEY = 'ronaGameLeaderboard';
 
   const lightsRow = document.getElementById('lightsRow');
   for(let i=0;i<14;i++){ const s=document.createElement('span'); lightsRow.appendChild(s); }
@@ -275,17 +278,14 @@
     const b = document.createElement('div');
     b.className = 'booth';
     b.dataset.idx = i;
-    b.innerHTML = [
-      '<div class="ring"></div>',
-      c.veil ? '<div class="veil"></div>' : '',
-      '<div class="outfit ' + c.outfit + '">' +
-        (c.bowtie ? '<div class="bowtie"></div>' : '') +
-        (c.tie ? '<div class="tie ' + c.tie + '"></div>' : '') +
-      '</div>',
-      '<div class="head"></div>',
-      '<div class="face">' + NEUTRAL + '</div>',
-      '<div class="label">' + c.label + '</div>'
-    ].join('');
+    b.innerHTML = `
+      <div class="ring"></div>
+      ${c.veil ? '<div class="veil"></div>' : ''}
+      <div class="outfit ${c.outfit}">${c.bowtie?'<div class="bowtie"></div>':''}${c.tie?'<div class="tie '+c.tie+'"></div>':''}</div>
+      <div class="head"></div>
+      <div class="face">${NEUTRAL}</div>
+      <div class="label">${c.label}</div>
+    `;
     stage.appendChild(b);
     booths.push({ el:b, faceEl:b.querySelector('.face'), flashing:false, flashType:'normal', timeoutId:null });
   });
@@ -392,7 +392,7 @@
 
   let lastCode = null;
 
-  async function endRound(){
+  function endRound(){
     roundActive = false;
     clearInterval(roundTimerId);
     clearTimeout(flashLoopId);
@@ -402,26 +402,60 @@
     if(score >= MEDAL_THRESHOLD) medalWrap.classList.remove('hidden'); else medalWrap.classList.add('hidden');
 
     const ts = Date.now();
-    lastCode = generateCode(playerName, score, ts);
+    lastCode = generateCode(score, ts);
     codeVal.textContent = lastCode;
 
-    await saveScoreAndShowLeaderboard();
-    await saveCertificate(playerName, score, ts, lastCode);
+    saveScoreAndShowLeaderboard();
     endScreen.classList.remove('hidden');
   }
 
-  function generateCode(name, sc, ts){
-    const str = name+'|'+sc+'|'+ts;
+  /* ============================================
+     SELF-VERIFYING CODE
+     score + timestamp are packed into the code itself,
+     with a checksum char — so the admin screen can verify
+     it just by decoding, with no shared server needed.
+     ============================================ */
+  const EPOCH = Date.UTC(2026, 0, 1); // 2026-01-01
+  const SALT = 'rona-shekar-lahze';
+
+  function simpleHash(str){
     let h = 0;
     for(let i=0;i<str.length;i++){ h = (h*31 + str.charCodeAt(i)) >>> 0; }
-    return h.toString(36).toUpperCase().slice(0,6).padEnd(6,'0');
+    return h;
   }
 
-  async function saveScoreAndShowLeaderboard(){
+  function generateCode(sc, ts){
+    const scorePart = Math.max(0, Math.min(sc, 1295)).toString(36).toUpperCase().padStart(2,'0');
+    const minutes = Math.floor((ts - EPOCH)/60000);
+    const timePart = Math.max(0, minutes).toString(36).toUpperCase().padStart(4,'0');
+    const base = scorePart + timePart;
+    const check = simpleHash(base + SALT).toString(36).toUpperCase().slice(0,1);
+    return base + check;
+  }
+
+  function decodeCode(code){
+    code = code.trim().toUpperCase().replace(/\s+/g,'');
+    if(code.length !== 7) return null;
+    const scorePart = code.slice(0,2);
+    const timePart = code.slice(2,6);
+    const checkPart = code.slice(6,7);
+    const base = scorePart + timePart;
+    const expected = simpleHash(base + SALT).toString(36).toUpperCase().slice(0,1);
+    if(checkPart !== expected) return null;
+    const sc = parseInt(scorePart, 36);
+    const minutes = parseInt(timePart, 36);
+    if(isNaN(sc) || isNaN(minutes)) return null;
+    return { score: sc, ts: EPOCH + minutes*60000 };
+  }
+
+  /* ============================================
+     LOCAL (per-device) LEADERBOARD
+     ============================================ */
+  function saveScoreAndShowLeaderboard(){
     let list = [];
     try {
-      const res = await window.storage.get('leaderboard', true);
-      if(res && res.value) list = JSON.parse(res.value);
+      const raw = localStorage.getItem(LB_KEY);
+      if(raw) list = JSON.parse(raw);
     } catch(e){ list = []; }
 
     const existing = list.find(e=>e.name === playerName);
@@ -430,22 +464,11 @@
     list.sort((a,b)=>b.score-a.score);
     list = list.slice(0,20);
 
-    try { await window.storage.set('leaderboard', JSON.stringify(list), true); } catch(e){}
+    try { localStorage.setItem(LB_KEY, JSON.stringify(list)); } catch(e){}
 
     leaderboardEl.innerHTML = list.slice(0,8).map((e,i)=>
       '<div class="row"><span>'+(i+1)+'. '+e.name+'</span><b>'+e.score+'</b></div>'
     ).join('') || '<div class="row">هنوز کسی بازی نکرده</div>';
-  }
-
-  async function saveCertificate(name, sc, ts, code){
-    let list = [];
-    try {
-      const res = await window.storage.get('certificates', true);
-      if(res && res.value) list = JSON.parse(res.value);
-    } catch(e){ list = []; }
-    list.push({ name, score:sc, ts, code });
-    list = list.slice(-500);
-    try { await window.storage.set('certificates', JSON.stringify(list), true); } catch(e){}
   }
 
   function buildCertificateCanvas(name, sc, code, ts){
@@ -487,7 +510,7 @@
             await navigator.share({ text:shareText, title:'گواهی شکار لحظه‌ها' });
           }
           shared = true;
-        } catch(e){ }
+        } catch(e){ /* cancelled or unsupported, fall back below */ }
       }
       if(!shared){
         const url = URL.createObjectURL(blob);
@@ -510,21 +533,14 @@
   if(location.search.includes('admin=1')){
     document.getElementById('nameScreen').classList.add('hidden');
     document.getElementById('adminScreen').classList.remove('hidden');
-    document.getElementById('adminCheckBtn').addEventListener('click', async ()=>{
-      const code = document.getElementById('adminCodeInput').value.trim().toUpperCase();
+    document.getElementById('adminCheckBtn').addEventListener('click', ()=>{
+      const code = document.getElementById('adminCodeInput').value;
       const resultEl = document.getElementById('adminResult');
-      resultEl.textContent = 'در حال بررسی...';
-      try {
-        const res = await window.storage.get('certificates', true);
-        const list = res && res.value ? JSON.parse(res.value) : [];
-        const found = list.find(e=>e.code === code);
-        if(found){
-          resultEl.textContent = '✅ تایید شد: '+found.name+' — '+found.score+' عکس — '+new Date(found.ts).toLocaleString('fa-IR');
-        } else {
-          resultEl.textContent = '❌ همچین کدی تو ثبت‌ها پیدا نشد.';
-        }
-      } catch(e){
-        resultEl.textContent = 'خطا در خوندن ثبت‌ها.';
+      const decoded = decodeCode(code);
+      if(decoded){
+        resultEl.textContent = '✅ کد معتبره — امتیاز: '+decoded.score+' عکس — زمان: '+new Date(decoded.ts).toLocaleString('fa-IR');
+      } else {
+        resultEl.textContent = '❌ این کد معتبر نیست یا اشتباه تایپ شده.';
       }
     });
   }
