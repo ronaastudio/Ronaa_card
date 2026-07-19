@@ -13,6 +13,34 @@ routeModal.addEventListener('click', (e) => {
 });
 
 /* ============================================
+   PAYMENT MODAL
+   ============================================ */
+const paymentModal = document.getElementById('paymentModal');
+document.getElementById('openPaymentModal').addEventListener('click', () => {
+  paymentModal.classList.add('open');
+});
+document.getElementById('closePaymentModal').addEventListener('click', () => {
+  paymentModal.classList.remove('open');
+});
+paymentModal.addEventListener('click', (e) => {
+  if (e.target === paymentModal) paymentModal.classList.remove('open');
+});
+
+const copyCardBtn = document.getElementById('copyCardBtn');
+copyCardBtn.addEventListener('click', () => {
+  const digits = document.getElementById('cardNumber').textContent.replace(/\s|\u00a0/g, '');
+  navigator.clipboard.writeText(digits).then(() => {
+    const original = copyCardBtn.innerHTML;
+    copyCardBtn.innerHTML = '<i class="fa-solid fa-check"></i> کپی شد';
+    copyCardBtn.classList.add('copied');
+    setTimeout(() => {
+      copyCardBtn.innerHTML = original;
+      copyCardBtn.classList.remove('copied');
+    }, 1800);
+  });
+});
+
+/* ============================================
    GALLERY LIGHTBOX (aperture reveal)
    ============================================ */
 const lightbox = document.getElementById('lightbox');
@@ -147,3 +175,17 @@ document.getElementById('calPrev').addEventListener('click', () => {
 });
 
 renderCalendar();
+
+/* ============================================
+   SCROLL REVEAL
+   ============================================ */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting){
+      entry.target.classList.add('in-view');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.reveal-up').forEach(el => revealObserver.observe(el));
