@@ -45,12 +45,12 @@
       تماس
     </a>
 
-    <a href="https://t.me/+989211027647" class="btn" target="_blank" rel="noopener">
+    <a href="https://t.me/maedekordian" class="btn" target="_blank" rel="noopener">
       <i class="fa-brands fa-telegram"></i>
       تلگرام
     </a>
 
-    <a href="https://instagram.com/ronastudio" class="btn" target="_blank" rel="noopener">
+    <a href="https://instagram.com/ronaa_studio" class="btn" target="_blank" rel="noopener">
       <i class="fa-brands fa-instagram"></i>
       اینستاگرام
     </a>
@@ -60,10 +60,10 @@
       مسیریابی
     </button>
 
-    <a href="#" class="btn btn-gold" id="depositBtn">
+    <button type="button" class="btn btn-gold" id="openPaymentModal">
       <i class="fa-solid fa-credit-card"></i>
       پرداخت بیعانه
-    </a>
+    </button>
 
   </div>
 
@@ -128,6 +128,8 @@
 
   <p class="phones">۰۳۸۳۴۲۳۴۰۳۰ &nbsp;|&nbsp; ۰۹۲۱۱۰۲۷۶۴۷</p>
 
+  <p class="address">ابتدای خیابان دفتری غربی، قبل از عینک چشمک</p>
+
   <p class="footer-note">استودیو رونا © تمامی حقوق محفوظ است</p>
 
 </footer>
@@ -151,9 +153,39 @@
       </video>
     </div>
 
-    <a href="https://maps.app.goo.gl/YOUR_LOCATION_LINK" target="_blank" rel="noopener" class="btn btn-gold route-map-btn">
+    <a href="https://maps.app.goo.gl/y1Byca2mtJ7fG8ux5" target="_blank" rel="noopener" class="btn btn-gold route-map-btn">
       <i class="fa-solid fa-map-location-dot"></i>
       لینک لوکیشن روی نقشه
+    </a>
+
+  </div>
+</div>
+
+<!-- ===== PAYMENT MODAL ===== -->
+<div class="modal-overlay" id="paymentModal">
+  <div class="modal-box">
+
+    <button type="button" class="modal-close" id="closePaymentModal" aria-label="بستن">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+
+    <h3 class="modal-title">پرداخت بیعانه</h3>
+
+    <p class="modal-desc">لطفاً ابتدا با استودیو هماهنگ کنید، سپس مبلغ بیعانه را به شماره کارت زیر واریز نمایید.</p>
+
+    <div class="card-box">
+      <p class="card-label">شماره کارت</p>
+      <p class="card-number" id="cardNumber">6063&nbsp;7311&nbsp;3591&nbsp;9406</p>
+      <p class="card-owner">به نام <strong>مائده کردیان</strong></p>
+      <button type="button" class="btn" id="copyCardBtn">
+        <i class="fa-regular fa-copy"></i>
+        کپی شماره کارت
+      </button>
+    </div>
+
+    <a href="https://ble.ir/ronaa" target="_blank" rel="noopener" class="btn btn-gold receipt-btn">
+      <i class="fa-solid fa-paper-plane"></i>
+      ارسال رسید پرداخت
     </a>
 
   </div>
