@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>شکار لحظه‌ها - رونا</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; user-select:none; }
+  html, body { width:100%; height:100%; overflow:hidden; font-family:'Segoe UI', Tahoma, sans-serif; background:#2b1f3d; touch-action:none; }
+  #app { position:relative; width:100%; height:100%; overflow:hidden; }
+
+  .hallSky { position:absolute; inset:0; background:radial-gradient(ellipse at 50% 0%, #6a4a8f 0%, #3a2856 55%, #201431 100%); }
+  .hallGlow { position:absolute; top:-10%; left:50%; transform:translateX(-50%); width:140%; height:60%;
+    background:radial-gradient(ellipse at center, rgba(255,225,180,0.25), transparent 70%); pointer-events:none; }
+  .lightsRow { position:absolute; top:6%; left:0; right:0; height:14px; display:flex; justify-content:space-around; pointer-events:none; }
+  .lightsRow span { width:8px; height:8px; border-radius:50%; background:#ffe9a8; box-shadow:0 0 10px 4px rgba(255,230,160,0.9);
+    animation:twinkle 1.6s ease-in-out infinite; }
+  .lightsRow span:nth-child(2n){ animation-delay:.4s; } .lightsRow span:nth-child(3n){ animation-delay:.8s; }
+  @keyframes twinkle { 0%,100%{opacity:.55} 50%{opacity:1} }
+  .arch { position:absolute; top:2%; left:50%; transform:translateX(-50%); width:78%; max-width:420px; height:26%;
+    border:10px solid rgba(255,255,255,0.18); border-bottom:none; border-radius:50% 50% 0 0 / 100% 100% 0 0;
+    pointer-events:none; }
+  .archFlowers { position:absolute; top:1%; left:50%; transform:translateX(-50%); width:80%; max-width:430px;
+    display:flex; justify-content:space-between; font-size:20px; pointer-events:none; filter:drop-shadow(0 2px 3px rgba(0,0,0,.4)); }
+  .hallTable { position:absolute; bottom:14%; width:90px; height:46px; border-radius:50%;
+    background:radial-gradient(ellipse at center, #fff8ec, #e8d9c0); box-shadow:0 10px 16px rgba(0,0,0,.4); filter:blur(0.5px); opacity:.75; }
+  .hallTable.left { left:2%; } .hallTable.right { right:2%; }
+  .hallFloor { position:absolute; bottom:0; left:0; right:0; height:16%;
+    background:linear-gradient(#4a3363,#251a38);
+    background-image:repeating-linear-gradient(90deg, rgba(255,255,255,0.05) 0 2px, transparent 2px 60px);
+  }
+
+  #hud {
+    position:fixed; top:0; left:0; right:0; padding:14px 18px; z-index:15;
+    display:flex; justify-content:space-between; align-items:center;
+    color:#fff; font-weight:bold; font-size:15px; text-shadow:1px 1px 3px rgba(0,0,0,.5);
+  }
+  #hud .pill { background:rgba(0,0,0,0.32); padding:6px 12px; border-radius:20px; pointer-events:none; }
+  #hud .gold { color:#ffe14a; }
+  #soundBtn { background:rgba(0,0,0,0.32); border:none; color:#fff; font-size:16px; border-radius:50%; width:34px; height:34px; cursor:pointer; }
+
+  .stageWrap { position:absolute; inset:0; display:flex; align-items:flex-end; justify-content:center; perspective:900px; padding-bottom:14%; }
+  .stage { display:flex; gap:2.5vw; align-items:flex-end; transform-style:preserve-3d; position:relative; z-index:2; }
+
+  .booth {
+    position:relative; width:20vw; max-width:110px; min-width:74px;
+    display:flex; flex-direction:column; align-items:center; cursor:pointer;
+    transition:transform .18s ease; touch-action:none;
+  }
+  .booth:nth-child(1){ transform:rotateY(22deg); }
+  .booth:nth-child(2){ transform:rotateY(11deg); }
+  .booth:nth-child(3){ transform:rotateY(0deg); }
+  .booth:nth-child(4){ transform:rotateY(-11deg); }
+  .booth:nth-child(5){ transform:rotateY(-22deg); }
+  .booth.flashing { transform:scale(1.16) translateY(-6px); }
+  .booth.flashing .ring { opacity:1; }
+  .booth.flashing.trap .ring { box-shadow:0 0 0 4px #ff5050, 0 0 22px 6px rgba(255,80,80,0.85); }
+  .booth.miss { animation: shake .3s; }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+  .ring {
+    position:absolute; top:-6%; width:112%; height:82%; border-radius:50%;
+    box-shadow:0 0 0 4px #ffe14a, 0 0 22px 6px rgba(255,225,74,0.8);
+    opacity:0; transition:opacity .1s;
+  }
+  .outfit {
+    width:82%; height:36vw; max-height:180px; min-height:86px; clip-path:polygon(32% 0%, 68% 0%, 100% 26%, 82% 100%, 18% 100%, 0% 26%);
+    box-shadow:0 8px 18px rgba(0,0,0,0.35); position:relative; z-index:1;
+  }
+  .outfit.suit { clip-path:polygon(28% 0%, 72% 0%, 96% 22%, 88% 100%, 12% 100%, 4% 22%); }
+  .outfit.c-white { background:linear-gradient(#fff,#f3e9ff); }
+  .outfit.c-black { background:linear-gradient(#3a3a4d,#15151f); }
+  .outfit.c-purple { background:linear-gradient(#9b6fe0,#5e3aa8); }
+  .outfit.c-red { background:linear-gradient(#ff5c72,#c81f3d); }
+  .outfit.c-teal { background:linear-gradient(#33bfae,#1c7d70); }
+
+  .outfit.c-white.c-bride { background:linear-gradient(#fff,#f3e9ff); }
+  .outfit.c-black.c-groom { background:linear-gradient(#2c2c3a,#15151f); }
+
+  .tie { position:absolute; top:20%; left:50%; transform:translateX(-50%); width:9%; height:52%;
+    clip-path:polygon(20% 0%,80% 0%,100% 14%,50% 100%,0% 14%); z-index:2; }
+  .tie.gold { background:#ffd66b; } .tie.silver { background:#d8d8e0; }
+
+  .head {
+    position:absolute; top:-36%; left:50%; transform:translateX(-50%);
+    width:46%; aspect-ratio:1; max-width:56px; min-width:36px; border-radius:50%;
+    background:radial-gradient(circle at 35% 32%, #ffe3c4, #ecc196);
+    box-shadow:0 4px 10px rgba(0,0,0,.3), inset 0 -4px 8px rgba(0,0,0,.08);
+    z-index:1;
+  }
+  .face {
+    position:absolute; top:-33%; left:50%; transform:translateX(-50%);
+    font-size:6.5vw; max-font-size:30px; line-height:1; z-index:2;
+    filter:drop-shadow(0 2px 3px rgba(0,0,0,.25));
+  }
+  .label { margin-top:6px; color:#fff; font-size:11px; font-weight:bold; text-shadow:1px 1px 2px rgba(0,0,0,.5); }
+
+  .veil { position:absolute; top:-42%; left:50%; transform:translateX(-50%); width:76%; height:58%;
+    background:rgba(255,255,255,0.55); border-radius:50% 50% 20% 20%; z-index:0; }
+  .bowtie { position:absolute; top:18%; left:50%; transform:translateX(-50%); width:20%; height:9%;
+    background:#c0392b; clip-path:polygon(0 0,50% 40%,100% 0,100% 100%,50% 60%,0 100%); z-index:2; }
+
+  .flashOverlay { position:fixed; inset:0; background:#fff; opacity:0; pointer-events:none; z-index:30; }
+  .flashOverlay.go { animation:flashPop .18s ease; }
+  @keyframes flashPop { 0%{opacity:0.85} 100%{opacity:0} }
+
+  .polaroid {
+    position:fixed; z-index:25; width:70px; height:84px; background:#fff; border-radius:6px;
+    box-shadow:0 10px 20px rgba(0,0,0,0.4); padding:6px 6px 16px; text-align:center;
+    transform-style:preserve-3d; pointer-events:none;
+  }
+  .polaroid.penalty { box-shadow:0 10px 20px rgba(200,0,0,0.55); border:2px solid #ff5050; }
+  .polaroid .shot { font-size:32px; }
+
+  .overlay {
+    position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    background:rgba(20,10,35,0.94); color:#fff; z-index:40; gap:12px; padding:24px; text-align:center;
+    overflow-y:auto;
+  }
+  .hidden { display:none; }
+  .title { font-size:28px; font-weight:800;
+    background:linear-gradient(90deg,#ffd6f0,#ffe14a,#c9a8ff);
+    -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .subtitle { font-size:14px; opacity:.85; max-width:300px; line-height:1.8; }
+  input.nameInput, input.codeInput { font-size:18px; padding:10px 16px; border-radius:14px; border:none; text-align:center; }
+  button.btn {
+    padding:14px 34px; font-size:17px; font-weight:bold; border:none; border-radius:28px; cursor:pointer;
+    background:linear-gradient(90deg,#ff8ab0,#c9a8ff); color:#2b1f3d; box-shadow:0 6px 18px rgba(200,150,255,0.5);
+  }
+  button.btn.secondary { background:linear-gradient(90deg,#4d96ff,#6bcb77); }
+  button.btn:active { transform:scale(.95); }
+  .medal { font-size:56px; }
+  .board { background:rgba(255,255,255,0.1); border-radius:14px; padding:10px 18px; width:260px; max-height:150px; overflow-y:auto; }
+  .board .row { display:flex; justify-content:space-between; font-size:14px; padding:4px 0; border-bottom:1px solid rgba(255,255,255,.12); }
+  .board .row:last-child{ border-bottom:none; }
+  .board .row b { color:#ffe14a; }
+  .codeBox { background:rgba(255,255,255,.12); border-radius:10px; padding:8px 16px; font-family:monospace; font-size:18px; letter-spacing:2px; }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <div class="hallSky"></div>
+  <div class="hallGlow"></div>
+  <div class="lightsRow" id="lightsRow"></div>
+  <div class="arch"></div>
+  <div class="archFlowers">🌸🌺🌸🌺🌸🌺🌸</div>
+  <div class="hallTable left"></div>
+  <div class="hallTable right"></div>
+  <div class="hallFloor"></div>
+
+  <div id="hud">
+    <div class="pill">⏱ <span id="timeVal">40</span></div>
+    <div class="pill">📸 <span id="scoreVal">0</span></div>
+    <div class="pill gold" id="medalHud" style="display:none;">🏅</div>
+    <button id="soundBtn">🔊</button>
+  </div>
+
+  <div class="flashOverlay" id="flashOverlay"></div>
+
+  <div class="stageWrap">
+    <div class="stage" id="stage"></div>
+  </div>
+
+  <div id="nameScreen" class="overlay">
+    <div class="title">شکار لحظه‌ها 📸</div>
+    <div class="subtitle">عروس‌وداماد و مهمون‌ها هر از گاهی یه لبخند یا شکلک بامزه درمیارن، فقط برای یه لحظه کوتاه! درست همون لحظه لمسشون کن تا عکسشون رو شکار کنی.<br><br>⚠️ حواست باشه: بعضی وقتا یکی‌شون گوشیش رو درمیاره و می‌خواد از شما عکس بگیره (🤳) — اگه اون رو لمس کنی امتیاز از دست می‌دی!</div>
+    <input class="nameInput" id="nameInput" placeholder="اسمت رو بنویس" maxlength="16" />
+    <button class="btn" id="startBtn">شروع شکار 🎬</button>
+  </div>
+
+  <div id="endScreen" class="overlay hidden">
+    <div class="title" style="font-size:24px;">زمان تموم شد!</div>
+    <div id="medalWrap" class="medal hidden">🏅</div>
+    <div class="subtitle">تعداد لحظه‌های شکارشده: <b id="finalScore" style="color:#ffe14a;font-size:20px;">0</b></div>
+    <div class="codeBox">کد تایید: <span id="codeVal">------</span></div>
+    <button class="btn secondary" id="shareBtn">📤 ارسال مدرک به بله</button>
+    <div class="board" id="leaderboard"></div>
+    <button class="btn" id="retryBtn">یه دور دیگه 🔁</button>
+  </div>
+
+  <div id="adminScreen" class="overlay hidden">
+    <div class="title" style="font-size:22px;">تایید کد شکار لحظه‌ها</div>
+    <div class="subtitle">کدی که مهمون برات فرستاده رو اینجا بزن تا مطابقتش با ثبت واقعی رو ببینی</div>
+    <input class="codeInput" id="adminCodeInput" placeholder="مثلاً A1B2C3" maxlength="8" />
+    <button class="btn" id="adminCheckBtn">بررسی کن</button>
+    <div id="adminResult" class="subtitle" style="color:#ffe14a;"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const CHARS = [
+    { id:'guest1', label:'مهمون', outfit:'suit c-purple', tie:'gold' },
+    { id:'bride', label:'عروس', outfit:'c-white c-bride', veil:true },
+    { id:'groom', label:'داماد', outfit:'suit c-black c-groom', bowtie:true },
+    { id:'guest2', label:'مهمون', outfit:'c-red' },
+    { id:'guest3', label:'مهمون', outfit:'suit c-teal', tie:'silver' },
+  ];
+  const NEUTRAL = '😐';
+  const FLASH_FACES = ['😄','😆','😜','😲','🤩'];
+  const PHONE_CHANCE = 0.24;
+  const ROUND_SECONDS = 40;
+  const FLASH_DURATION_MS = 600;
+  const MEDAL_THRESHOLD = 30;
+
+  const lightsRow = document.getElementById('lightsRow');
+  for(let i=0;i<14;i++){ const s=document.createElement('span'); lightsRow.appendChild(s); }
+
+  const stage = document.getElementById('stage');
+  const timeVal = document.getElementById('timeVal');
+  const scoreVal = document.getElementById('scoreVal');
+  const medalHud = document.getElementById('medalHud');
+  const flashOverlay = document.getElementById('flashOverlay');
+  const nameScreen = document.getElementById('nameScreen');
+  const endScreen = document.getElementById('endScreen');
+  const nameInput = document.getElementById('nameInput');
+  const finalScore = document.getElementById('finalScore');
+  const medalWrap = document.getElementById('medalWrap');
+  const leaderboardEl = document.getElementById('leaderboard');
+  const codeVal = document.getElementById('codeVal');
+  const soundBtn = document.getElementById('soundBtn');
+
+  let audioCtx = null, soundOn = true;
+  function ensureAudio(){ if(!audioCtx){ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); } }
+  function playShutter(){
+    if(!soundOn) return; ensureAudio();
+    const ctx = audioCtx, dur = 0.06;
+    const buffer = ctx.createBuffer(1, ctx.sampleRate*dur, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for(let i=0;i<data.length;i++) data[i] = (Math.random()*2-1) * (1 - i/data.length);
+    const noise = ctx.createBufferSource(); noise.buffer = buffer;
+    const filter = ctx.createBiquadFilter(); filter.type='highpass'; filter.frequency.value=1500;
+    const gain = ctx.createGain(); gain.gain.setValueAtTime(0.5, ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+dur);
+    noise.connect(filter); filter.connect(gain); gain.connect(ctx.destination);
+    noise.start();
+  }
+  function playPenalty(){
+    if(!soundOn) return; ensureAudio();
+    const ctx = audioCtx;
+    const osc = ctx.createOscillator(); osc.type='sawtooth';
+    const gain = ctx.createGain();
+    osc.frequency.setValueAtTime(280, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(90, ctx.currentTime+0.35);
+    gain.gain.setValueAtTime(0.22, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.35);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(); osc.stop(ctx.currentTime+0.36);
+  }
+  const MELODY = [523,659,784,659,523,659,784,988,880,784,659,523,587,698,880,698];
+  let musicStep = 0, musicTimer = null;
+  function scheduleNote(){
+    if(soundOn){
+      ensureAudio();
+      const freq = MELODY[musicStep % MELODY.length];
+      const osc = audioCtx.createOscillator(); osc.type='triangle';
+      const gain = audioCtx.createGain();
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.05, audioCtx.currentTime+0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime+0.3);
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.start(); osc.stop(audioCtx.currentTime+0.32);
+      musicStep++;
+    }
+    musicTimer = setTimeout(scheduleNote, 320);
+  }
+  soundBtn.addEventListener('click', ()=>{
+    soundOn = !soundOn;
+    soundBtn.textContent = soundOn ? '🔊' : '🔇';
+  });
+
+  let booths = [];
+  CHARS.forEach((c,i)=>{
+    const b = document.createElement('div');
+    b.className = 'booth';
+    b.dataset.idx = i;
+    b.innerHTML = [
+      '<div class="ring"></div>',
+      c.veil ? '<div class="veil"></div>' : '',
+      '<div class="outfit ' + c.outfit + '">' +
+        (c.bowtie ? '<div class="bowtie"></div>' : '') +
+        (c.tie ? '<div class="tie ' + c.tie + '"></div>' : '') +
+      '</div>',
+      '<div class="head"></div>',
+      '<div class="face">' + NEUTRAL + '</div>',
+      '<div class="label">' + c.label + '</div>'
+    ].join('');
+    stage.appendChild(b);
+    booths.push({ el:b, faceEl:b.querySelector('.face'), flashing:false, flashType:'normal', timeoutId:null });
+  });
+
+  let score = 0, timeLeft = ROUND_SECONDS, roundActive = false, roundTimerId = null, flashLoopId = null, playerName = 'مهمون';
+
+  function randInt(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+
+  function resetBooth(b){
+    clearTimeout(b.timeoutId);
+    b.flashing = false;
+    b.flashType = 'normal';
+    b.faceEl.textContent = NEUTRAL;
+    b.el.classList.remove('flashing','trap');
+  }
+
+  function triggerFlash(){
+    if(!roundActive) return;
+    const idle = booths.filter(b=>!b.flashing);
+    if(idle.length === 0) return;
+    const b = idle[randInt(0, idle.length-1)];
+    const isPhone = Math.random() < PHONE_CHANCE;
+    b.flashing = true;
+    b.flashType = isPhone ? 'phone' : 'normal';
+    b.faceEl.textContent = isPhone ? '🤳' : FLASH_FACES[randInt(0, FLASH_FACES.length-1)];
+    b.el.classList.add('flashing');
+    b.el.classList.toggle('trap', isPhone);
+    b.timeoutId = setTimeout(()=>{ if(b.flashing) resetBooth(b); }, FLASH_DURATION_MS);
+  }
+
+  function scheduleFlashLoop(){
+    const secondsIn = ROUND_SECONDS - timeLeft;
+    const gap = secondsIn > 22 ? randInt(420,850) : randInt(600,1150);
+    flashLoopId = setTimeout(()=>{
+      triggerFlash();
+      if(roundActive) scheduleFlashLoop();
+    }, gap);
+  }
+
+  function spawnPolaroid(x,y,face,isPenalty){
+    const p = document.createElement('div');
+    p.className = 'polaroid' + (isPenalty?' penalty':'');
+    p.style.left = (x-35)+'px';
+    p.style.top = (y-42)+'px';
+    p.innerHTML = '<div class="shot">'+face+'</div>';
+    document.body.appendChild(p);
+    const rot = randInt(-18,18);
+    p.animate([
+      { transform:'translateY(0) rotate(0deg) scale(1)', opacity:1 },
+      { transform:'translateY(-140px) rotate('+rot+'deg) scale(0.8)', opacity:0 }
+    ], { duration:900, easing:'ease-out' });
+    setTimeout(()=>p.remove(), 900);
+  }
+
+  function doFlashOverlay(){
+    flashOverlay.classList.remove('go');
+    void flashOverlay.offsetWidth;
+    flashOverlay.classList.add('go');
+  }
+
+  booths.forEach(b=>{
+    b.el.addEventListener('pointerdown', (e)=>{
+      e.preventDefault();
+      if(!roundActive) return;
+      const rect = b.el.getBoundingClientRect();
+      if(b.flashing){
+        const wasTrap = b.flashType === 'phone';
+        const face = b.faceEl.textContent;
+        resetBooth(b);
+        if(wasTrap){
+          score = Math.max(0, score-1);
+          playPenalty();
+          spawnPolaroid(rect.left+rect.width/2, rect.top+rect.height*0.3, '🚫', true);
+        } else {
+          score++;
+          playShutter();
+          doFlashOverlay();
+          spawnPolaroid(rect.left+rect.width/2, rect.top+rect.height*0.3, face, false);
+        }
+        scoreVal.textContent = score;
+        if(score === MEDAL_THRESHOLD) medalHud.style.display = 'inline';
+      } else {
+        b.el.classList.add('miss');
+        setTimeout(()=>b.el.classList.remove('miss'), 300);
+      }
+    }, {passive:false});
+  });
+
+  function startRound(){
+    score = 0; timeLeft = ROUND_SECONDS;
+    scoreVal.textContent = 0; timeVal.textContent = timeLeft;
+    medalHud.style.display = 'none';
+    booths.forEach(resetBooth);
+    nameScreen.classList.add('hidden');
+    endScreen.classList.add('hidden');
+    roundActive = true;
+    roundTimerId = setInterval(()=>{
+      timeLeft--;
+      timeVal.textContent = timeLeft;
+      if(timeLeft <= 0) endRound();
+    }, 1000);
+    scheduleFlashLoop();
+  }
+
+  let lastCode = null;
+
+  async function endRound(){
+    roundActive = false;
+    clearInterval(roundTimerId);
+    clearTimeout(flashLoopId);
+    booths.forEach(resetBooth);
+
+    finalScore.textContent = score;
+    if(score >= MEDAL_THRESHOLD) medalWrap.classList.remove('hidden'); else medalWrap.classList.add('hidden');
+
+    const ts = Date.now();
+    lastCode = generateCode(playerName, score, ts);
+    codeVal.textContent = lastCode;
+
+    await saveScoreAndShowLeaderboard();
+    await saveCertificate(playerName, score, ts, lastCode);
+    endScreen.classList.remove('hidden');
+  }
+
+  function generateCode(name, sc, ts){
+    const str = name+'|'+sc+'|'+ts;
+    let h = 0;
+    for(let i=0;i<str.length;i++){ h = (h*31 + str.charCodeAt(i)) >>> 0; }
+    return h.toString(36).toUpperCase().slice(0,6).padEnd(6,'0');
+  }
+
+  async function saveScoreAndShowLeaderboard(){
+    let list = [];
+    try {
+      const res = await window.storage.get('leaderboard', true);
+      if(res && res.value) list = JSON.parse(res.value);
+    } catch(e){ list = []; }
+
+    const existing = list.find(e=>e.name === playerName);
+    if(existing){ if(score > existing.score) existing.score = score; }
+    else list.push({ name:playerName, score });
+    list.sort((a,b)=>b.score-a.score);
+    list = list.slice(0,20);
+
+    try { await window.storage.set('leaderboard', JSON.stringify(list), true); } catch(e){}
+
+    leaderboardEl.innerHTML = list.slice(0,8).map((e,i)=>
+      '<div class="row"><span>'+(i+1)+'. '+e.name+'</span><b>'+e.score+'</b></div>'
+    ).join('') || '<div class="row">هنوز کسی بازی نکرده</div>';
+  }
+
+  async function saveCertificate(name, sc, ts, code){
+    let list = [];
+    try {
+      const res = await window.storage.get('certificates', true);
+      if(res && res.value) list = JSON.parse(res.value);
+    } catch(e){ list = []; }
+    list.push({ name, score:sc, ts, code });
+    list = list.slice(-500);
+    try { await window.storage.set('certificates', JSON.stringify(list), true); } catch(e){}
+  }
+
+  function buildCertificateCanvas(name, sc, code, ts){
+    const c = document.createElement('canvas');
+    c.width = 640; c.height = 400;
+    const g = c.getContext('2d');
+    const grad = g.createLinearGradient(0,0,640,400);
+    grad.addColorStop(0,'#3d2a5c'); grad.addColorStop(1,'#8a5fae');
+    g.fillStyle = grad; g.fillRect(0,0,640,400);
+    g.fillStyle = 'rgba(255,255,255,0.08)';
+    g.fillRect(20,20,600,360);
+    g.textAlign = 'center';
+    g.fillStyle = '#ffe14a'; g.font = 'bold 30px Tahoma';
+    g.fillText('گواهی شکار لحظه‌ها 📸', 320, 74);
+    g.fillStyle = '#fff'; g.font = '22px Tahoma';
+    g.fillText(name, 320, 146);
+    g.font = 'bold 58px Tahoma'; g.fillStyle = '#ffe14a';
+    g.fillText(sc + ' عکس', 320, 226);
+    g.font = '15px Tahoma'; g.fillStyle = 'rgba(255,255,255,.8)';
+    g.fillText(new Date(ts).toLocaleString('fa-IR'), 320, 264);
+    g.font = 'bold 22px monospace'; g.fillStyle = '#fff';
+    g.fillText('کد تایید: ' + code, 320, 320);
+    g.font = '13px Tahoma'; g.fillStyle = 'rgba(255,255,255,.6)';
+    g.fillText('عروسی رونا', 320, 360);
+    return c;
+  }
+
+  document.getElementById('shareBtn').addEventListener('click', ()=>{
+    const canvas = buildCertificateCanvas(playerName, score, lastCode, Date.now());
+    canvas.toBlob(async (blob)=>{
+      const shareText = 'من '+score+' تا لحظه رو تو «شکار لحظه‌ها»ی عروسی رونا شکار کردم! 📸\nکد تایید: '+lastCode;
+      const file = new File([blob], 'gavahi-shekar-lahze.png', { type:'image/png' });
+      let shared = false;
+      if(navigator.share){
+        try {
+          if(navigator.canShare && navigator.canShare({ files:[file] })){
+            await navigator.share({ files:[file], text:shareText, title:'گواهی شکار لحظه‌ها' });
+          } else {
+            await navigator.share({ text:shareText, title:'گواهی شکار لحظه‌ها' });
+          }
+          shared = true;
+        } catch(e){ }
+      }
+      if(!shared){
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = 'gavahi-shekar-lahze.png'; a.click();
+        try { await navigator.clipboard.writeText(shareText); alert('عکس گواهی دانلود و متنش کپی شد؛ می‌تونی توی بله برای عروس‌وداماد بفرستیش.'); }
+        catch(e){ alert('عکس گواهی دانلود شد؛ می‌تونی توی بله برای عروس‌وداماد بفرستیش.'); }
+      }
+    }, 'image/png');
+  });
+
+  document.getElementById('startBtn').addEventListener('click', ()=>{
+    ensureAudio();
+    if(!musicTimer) scheduleNote();
+    const v = nameInput.value.trim();
+    playerName = v || ('مهمون' + randInt(100,999));
+    startRound();
+  });
+  document.getElementById('retryBtn').addEventListener('click', startRound);
+
+  if(location.search.includes('admin=1')){
+    document.getElementById('nameScreen').classList.add('hidden');
+    document.getElementById('adminScreen').classList.remove('hidden');
+    document.getElementById('adminCheckBtn').addEventListener('click', async ()=>{
+      const code = document.getElementById('adminCodeInput').value.trim().toUpperCase();
+      const resultEl = document.getElementById('adminResult');
+      resultEl.textContent = 'در حال بررسی...';
+      try {
+        const res = await window.storage.get('certificates', true);
+        const list = res && res.value ? JSON.parse(res.value) : [];
+        const found = list.find(e=>e.code === code);
+        if(found){
+          resultEl.textContent = '✅ تایید شد: '+found.name+' — '+found.score+' عکس — '+new Date(found.ts).toLocaleString('fa-IR');
+        } else {
+          resultEl.textContent = '❌ همچین کدی تو ثبت‌ها پیدا نشد.';
+        }
+      } catch(e){
+        resultEl.textContent = 'خطا در خوندن ثبت‌ها.';
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>
