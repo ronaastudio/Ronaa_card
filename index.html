@@ -85,7 +85,15 @@
   <p class="eyebrow center">نمونه کارها</p>
   <h2 class="section-title reveal-up">گالری تصاویر</h2>
 
-  <div class="gallery-grid reveal-up" id="galleryGrid">
+  <div class="gallery-toggle-wrap reveal-up">
+    <button type="button" class="btn btn-gold" id="toggleGallery">
+      <i class="fa-solid fa-images"></i>
+      مشاهده گالری
+    </button>
+  </div>
+
+  <div class="gallery-wrap" id="galleryWrap">
+    <div class="gallery-grid" id="galleryGrid">
     <button class="gallery-item" data-src="gallery/1.jpg"><img src="gallery/1.jpg" alt="نمونه کار ۱" loading="lazy"></button>
     <button class="gallery-item" data-src="gallery/2.jpg"><img src="gallery/2.jpg" alt="نمونه کار ۲" loading="lazy"></button>
     <button class="gallery-item" data-src="gallery/3.jpg"><img src="gallery/3.jpg" alt="نمونه کار ۳" loading="lazy"></button>
@@ -94,6 +102,7 @@
     <button class="gallery-item" data-src="gallery/6.jpg"><img src="gallery/6.jpg" alt="نمونه کار ۶" loading="lazy"></button>
     <button class="gallery-item" data-src="gallery/7.jpg"><img src="gallery/7.jpg" alt="نمونه کار ۷" loading="lazy"></button>
     <button class="gallery-item" data-src="gallery/8.jpg"><img src="gallery/8.jpg" alt="نمونه کار ۸" loading="lazy"></button>
+    </div>
   </div>
 
 </section>
