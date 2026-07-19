@@ -6,18 +6,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>RONA Studio</title>
+<title>استودیو رونا | نور لحظه‌های ماندگار شما</title>
 
 <link rel="stylesheet" href="stile.css">
 
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#102544">
+<meta name="theme-color" content="#0B1B33">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" href="favicon.png">
 
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 </head>
 
@@ -26,123 +25,148 @@
 <div class="bg1"></div>
 <div class="bg2"></div>
 
-<div class="card">
+<!-- ===== HERO ===== -->
+<header class="hero">
 
-<img src="logo.png" class="logo">
+  <div class="aperture-ring" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
 
-<h1>استودیو رونا</h1>
+  <img src="logo.png" class="logo" alt="لوگوی استودیو رونا">
 
-<p class="slogan">
-نور لحظه‌های ماندگار شما
-</p>
+  <p class="eyebrow">آتلیه عکاسی</p>
+  <h1>استودیو رونا</h1>
+  <p class="slogan">نور لحظه‌های ماندگار شما</p>
 
-<div class="buttons">
+  <div class="buttons">
 
-<a href="tel:09211027647" class="btn">
-<i class="fa-solid fa-phone"></i>
-تماس
-</a>
+    <a href="tel:09211027647" class="btn btn-primary">
+      <i class="fa-solid fa-phone"></i>
+      تماس
+    </a>
 
-<a href="https://t.me/+989211027647" class="btn">
-<i class="fa-brands fa-telegram"></i>
-تلگرام
-</a>
+    <a href="https://t.me/+989211027647" class="btn" target="_blank" rel="noopener">
+      <i class="fa-brands fa-telegram"></i>
+      تلگرام
+    </a>
 
-<a href="https://instagram.com/ronaa_studio" class="btn">
-<i class="fa-brands fa-instagram"></i>
-اینستاگرام
-</a>
+    <a href="https://instagram.com/ronastudio" class="btn" target="_blank" rel="noopener">
+      <i class="fa-brands fa-instagram"></i>
+      اینستاگرام
+    </a>
 
-<a href="https://maps.app.goo.gl/y1Byca2mtJ7fG8ux5" class="btn">
-<i class="fa-solid fa-location-dot"></i>
-مسیریابی
-</a>
-<a href="#" class="btn" onclick="openPayment()">
-<i class="fa-solid fa-credit-card"></i>
-پرداخت بیعانه
-</a>
+    <button type="button" class="btn" id="openRouteModal">
+      <i class="fa-solid fa-location-dot"></i>
+      مسیریابی
+    </button>
+
+    <a href="#" class="btn btn-gold" id="depositBtn">
+      <i class="fa-solid fa-credit-card"></i>
+      پرداخت بیعانه
+    </a>
+
+  </div>
+
+</header>
+
+<div class="divider"><i class="fa-solid fa-circle-notch"></i></div>
+
+<!-- ===== GALLERY ===== -->
+<section class="section gallery-section">
+
+  <p class="eyebrow center">نمونه کارها</p>
+  <h2 class="section-title">گالری تصاویر</h2>
+
+  <div class="gallery-grid" id="galleryGrid">
+    <button class="gallery-item" data-src="gallery/1.jpg"><img src="gallery/1.jpg" alt="نمونه کار ۱" loading="lazy"></button>
+    <button class="gallery-item" data-src="gallery/2.jpg"><img src="gallery/2.jpg" alt="نمونه کار ۲" loading="lazy"></button>
+    <button class="gallery-item" data-src="gallery/3.jpg"><img src="gallery/3.jpg" alt="نمونه کار ۳" loading="lazy"></button>
+    <button class="gallery-item" data-src="gallery/4.jpg"><img src="gallery/4.jpg" alt="نمونه کار ۴" loading="lazy"></button>
+    <button class="gallery-item" data-src="gallery/5.jpg"><img src="gallery/5.jpg" alt="نمونه کار ۵" loading="lazy"></button>
+    <button class="gallery-item" data-src="gallery/6.jpg"><img src="gallery/6.jpg" alt="نمونه کار ۶" loading="lazy"></button>
+    <button class="gallery-item" data-src="gallery/7.jpg"><img src="gallery/7.jpg" alt="نمونه کار ۷" loading="lazy"></button>
+    <button class="gallery-item" data-src="gallery/8.jpg"><img src="gallery/8.jpg" alt="نمونه کار ۸" loading="lazy"></button>
+  </div>
+
+</section>
+
+<div class="divider"><i class="fa-solid fa-circle-notch"></i></div>
+
+<!-- ===== CALENDAR ===== -->
+<section class="section calendar-section">
+
+  <p class="eyebrow center">تقویم</p>
+  <h2 class="section-title">رزرو نوبت</h2>
+
+  <div class="calendar-card">
+
+    <div class="calendar-head">
+      <button type="button" id="calNext" aria-label="ماه بعد"><i class="fa-solid fa-chevron-right"></i></button>
+      <div class="calendar-month" id="calMonthLabel"></div>
+      <button type="button" id="calPrev" aria-label="ماه قبل"><i class="fa-solid fa-chevron-left"></i></button>
+    </div>
+
+    <div class="calendar-weekdays">
+      <span>ش</span><span>ی</span><span>د</span><span>س</span><span>چ</span><span>پ</span><span>ج</span>
+    </div>
+
+    <div class="calendar-grid" id="calendarGrid"></div>
+
+    <p class="calendar-hint">روز مورد نظرتان برای عکاسی را انتخاب کنید و از طریق تلگرام یا تماس هماهنگ کنید.</p>
+
+  </div>
+
+</section>
+
+<div class="divider"><i class="fa-solid fa-circle-notch"></i></div>
+
+<!-- ===== CONTACT / FOOTER ===== -->
+<footer class="section contact-section">
+
+  <p class="eyebrow center">در تماس باشید</p>
+  <h2 class="section-title">شماره تماس</h2>
+
+  <p class="phones">۰۳۸۳۴۲۳۴۰۳۰ &nbsp;|&nbsp; ۰۹۲۱۱۰۲۷۶۴۷</p>
+
+  <p class="footer-note">استودیو رونا © تمامی حقوق محفوظ است</p>
+
+</footer>
+
+<!-- ===== ROUTE MODAL ===== -->
+<div class="modal-overlay" id="routeModal">
+  <div class="modal-box">
+
+    <button type="button" class="modal-close" id="closeRouteModal" aria-label="بستن">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+
+    <h3 class="modal-title">مسیر رسیدن به استودیو رونا</h3>
+
+    <p class="modal-desc">ابتدا فیلم مسیر را ببینید تا با محیط اطراف آشنا شوید، سپس برای مسیریابی دقیق روی نقشه، گزینه لوکیشن را بزنید.</p>
+
+    <div class="route-video-wrap">
+      <video controls preload="metadata" poster="favicon.png">
+        <source src="street-video.mp4" type="video/mp4">
+        مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند.
+      </video>
+    </div>
+
+    <a href="https://maps.app.goo.gl/YOUR_LOCATION_LINK" target="_blank" rel="noopener" class="btn btn-gold route-map-btn">
+      <i class="fa-solid fa-map-location-dot"></i>
+      لینک لوکیشن روی نقشه
+    </a>
+
+  </div>
 </div>
 
-<div class="info">
-
-<h3>شماره تماس</h3>
-
-<p id="number">
-09211027647   ‏‪‪03834234030‬‬‏
-</p>
-
-<button onclick="copyNumber()">
-کپی شماره
-</button>
-
-<h3>آدرس</h3>
-
-<p>
-ابتدای خیابان دفتری غربی<br>
-قبل از عینک چشمک
-</p>
-
+<!-- ===== GALLERY LIGHTBOX ===== -->
+<div class="lightbox-overlay" id="lightbox">
+  <button type="button" class="modal-close" id="closeLightbox" aria-label="بستن"><i class="fa-solid fa-xmark"></i></button>
+  <div class="lightbox-aperture" id="lightboxAperture">
+    <img id="lightboxImg" src="" alt="نمایش بزرگ تصویر">
+  </div>
 </div>
 
-</div>
-<div id="paymentModal" class="modal">
-
-<div class="modal-content">
-
-<h2>پرداخت بیعانه</h2>
-
-<p class="pay-text">
-لطفاً ابتدا با استودیو هماهنگ کنید.
-</p>
-
-<button class="pay-btn" onclick="showCard()">
-💳 کارت به کارت
-</button>
-
-<a href="#" class="pay-btn">
-🔗 پرداخت با لینک
-</a>
-
-<div id="cardBox" style="display:none">
-
-<h3>شماره کارت</h3>
-
-<p id="cardNumber">
-6063731135919406
-</p>
-
-<p>
-به نام <strong>مائده کردیان</strong>
-</p>
-
-<button onclick="copyCard()">
-📋 کپی شماره کارت
-</button>
-
-<a
-href=https://ble.ir/ronaa
-class="pay-btn"
-style="margin-top:15px;display:block;text-align:center;">
-ارسال رسید پرداخت
-</a>
-
-</div>
-
-<button class="close-btn" onclick="closePayment()">
-بستن
-</button>
-
-</div>
-
-</div>
 <script src="script.js"></script>
-
-<script>
-if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("service-worker.js");
-}
-</script>
-
 </body>
-
 </html>
