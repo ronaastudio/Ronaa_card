@@ -12,16 +12,16 @@
     --ink:#3c2a2f; --cream:#fff8f1; --danger:#c0453f;
   }
   *{box-sizing:border-box;}
-  html,body{ margin:0; padding:0; height:100%; font-family:'Vazirmatn',sans-serif;
+  html,body{ margin:0; padding:0; height:100vh; height:100dvh; font-family:'Vazirmatn',sans-serif;
     background:linear-gradient(180deg,#2a1620 0%, #4a2436 100%); color:var(--ink);
     overflow:hidden; -webkit-tap-highlight-color: transparent; }
-  #app{ max-width:560px; margin:0 auto; height:100%; display:flex; flex-direction:column; position:relative; }
-  header{ padding:8px 12px 6px; display:flex; align-items:center; justify-content:space-between; gap:5px; }
-  .title{ font-weight:900; font-size:.98rem; color:var(--gold-light); letter-spacing:.5px; }
-  .title small{display:block;font-weight:400;font-size:.6rem;color:#e0b8a8;margin-top:1px;}
-  .scores{ display:flex; gap:5px; }
-  .pill{ background:var(--cream); border:1.5px solid var(--gold-light); border-radius:999px; padding:4px 9px;
-    font-weight:700; font-size:.72rem; box-shadow:0 2px 6px rgba(0,0,0,.25); display:flex; align-items:center; gap:3px;
+  #app{ max-width:560px; margin:0 auto; height:100vh; height:100dvh; display:flex; flex-direction:column; position:relative; }
+  header{ padding:8px 12px 6px; display:flex; align-items:center; justify-content:space-between; gap:6px; flex-wrap:wrap; }
+  .title{ font-weight:900; font-size:1.2rem; color:var(--gold-light); letter-spacing:.5px; }
+  .title small{display:block;font-weight:400;font-size:.78rem;color:#e0b8a8;margin-top:1px;}
+  .scores{ display:flex; gap:5px; flex-wrap:wrap; }
+  .pill{ background:var(--cream); border:1.5px solid var(--gold-light); border-radius:999px; padding:5px 11px;
+    font-weight:700; font-size:.85rem; box-shadow:0 2px 6px rgba(0,0,0,.25); display:flex; align-items:center; gap:3px;
     white-space:nowrap; transition:transform .15s ease, background .2s ease; }
   .pill span.num{color:var(--blush-deep); font-weight:900;}
   .pill.timer span.num{color:#b0453f;}
@@ -71,7 +71,10 @@
   #tutorialBubble.danger b{color:var(--danger);}
   #tutorialBubble .btn{width:100%; margin-top:8px; padding:8px; font-size:.8rem;}
   .floaters{position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:10;}
-  footer{ text-align:center; padding:3px 0 6px; font-size:.65rem; color:#e0b8a8; }
+  footer{ padding:0; overflow:hidden; white-space:nowrap; background:rgba(0,0,0,.15); }
+  .marquee-text{ display:inline-block; padding-right:100%; font-size:.75rem; font-weight:700; color:var(--gold-light);
+    letter-spacing:.4px; animation: marquee 15s linear infinite; }
+  @keyframes marquee{ from{transform:translateX(0);} to{transform:translateX(-100%);} }
   .bigscore{font-size:2.2rem; font-weight:900; color:var(--blush-deep); margin:4px 0;}
   .rankTitle{ display:inline-block; background:linear-gradient(135deg,var(--gold),#b9843e); color:#fff;
     padding:5px 16px; border-radius:999px; font-weight:800; font-size:.85rem; margin-bottom:6px; }
@@ -109,6 +112,7 @@
     <div class="overlay" id="startOverlay">
       <div class="card" id="cardContent">
         <h2>شکار لحظه‌ها 💛</h2>
+        <p style="margin-top:-4px;font-size:.72rem;color:#a3807c;">یک بازی از استودیو رونا</p>
         <p>توی تالار عروسی، عروس، داماد و مهمون‌ها رد می‌شن. وقتی یکیشون یه لحظه‌ی خاص نشون داد، درست همون لحظه روش بزن! فقط ۳۰ ثانیه وقت داری.</p>
         <div class="rule">✋ لحظه‌ی عادی = ۱ امتیاز (با کمبو بیشتر می‌شه)</div>
         <div class="rule">👀 سرک‌کشیدن ۰.۳ ثانیه‌ای = ۳ امتیاز</div>
@@ -119,7 +123,7 @@
       </div>
     </div>
   </div>
-  <footer>رونا · بازی بازی کنیم</footer>
+  <footer><div class="marquee-text">📸 استودیو رونا · عکاسی و فیلم‌برداری عروسی · شکار لحظه‌ها یه بازی از استودیو رونا 📸 &nbsp;&nbsp;&nbsp;&nbsp; 📸 استودیو رونا 📸</div></footer>
 </div>
 
 <script>
@@ -183,11 +187,11 @@
   function playChime(){ ensureAudio(); [660,880,1100].forEach((f,i)=>tone(f,0.3,'sine',0.12,i*0.06)); }
   function startAmbient(){
     ensureAudio(); if(!audioCtx || ambientNodes) return;
-    const g=audioCtx.createGain(); g.gain.value=0.035; g.connect(masterGain);
+    const g=audioCtx.createGain(); g.gain.value=0.02; g.connect(masterGain);
     const o1=audioCtx.createOscillator(); o1.type='sine'; o1.frequency.value=220;
     const o2=audioCtx.createOscillator(); o2.type='sine'; o2.frequency.value=277.2;
     const lfo=audioCtx.createOscillator(); lfo.frequency.value=0.15;
-    const lfoGain=audioCtx.createGain(); lfoGain.gain.value=0.015;
+    const lfoGain=audioCtx.createGain(); lfoGain.gain.value=0.01;
     lfo.connect(lfoGain); lfoGain.connect(g.gain);
     o1.connect(g); o2.connect(g);
     o1.start(); o2.start(); lfo.start();
@@ -198,6 +202,70 @@
     try{ ambientNodes.o1.stop(); ambientNodes.o2.stop(); ambientNodes.lfo.stop(); }catch(e){}
     ambientNodes=null;
   }
+
+  // ---- bandari-style rhythmic loop ----
+  let noiseBufferCache=null, bandariRunning=false, bandariTimeoutId=null;
+  function getNoiseBuffer(){
+    if(noiseBufferCache) return noiseBufferCache;
+    const size=audioCtx.sampleRate*0.5;
+    const buf=audioCtx.createBuffer(1,size,audioCtx.sampleRate);
+    const d=buf.getChannelData(0);
+    for(let i=0;i<size;i++) d[i]=Math.random()*2-1;
+    noiseBufferCache=buf; return buf;
+  }
+  function playKick(t){
+    if(!audioCtx) return;
+    const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+    o.type='sine'; o.frequency.setValueAtTime(150,t); o.frequency.exponentialRampToValueAtTime(48,t+0.15);
+    g.gain.setValueAtTime(0.001,t); g.gain.exponentialRampToValueAtTime(0.4,t+0.008); g.gain.exponentialRampToValueAtTime(0.001,t+0.2);
+    o.connect(g); g.connect(masterGain); o.start(t); o.stop(t+0.22);
+  }
+  function playTak(t){
+    if(!audioCtx) return;
+    const src=audioCtx.createBufferSource(); src.buffer=getNoiseBuffer();
+    const filt=audioCtx.createBiquadFilter(); filt.type='bandpass'; filt.frequency.value=2600; filt.Q.value=1.2;
+    const g=audioCtx.createGain(); g.gain.setValueAtTime(0.001,t); g.gain.exponentialRampToValueAtTime(0.28,t+0.004); g.gain.exponentialRampToValueAtTime(0.001,t+0.09);
+    src.connect(filt); filt.connect(g); g.connect(masterGain); src.start(t); src.stop(t+0.1);
+  }
+  function playShaker(t,vol){
+    if(!audioCtx) return;
+    const src=audioCtx.createBufferSource(); src.buffer=getNoiseBuffer();
+    const filt=audioCtx.createBiquadFilter(); filt.type='highpass'; filt.frequency.value=6000;
+    const g=audioCtx.createGain(); g.gain.setValueAtTime(0.001,t); g.gain.exponentialRampToValueAtTime(vol||0.06,t+0.003); g.gain.exponentialRampToValueAtTime(0.001,t+0.05);
+    src.connect(filt); filt.connect(g); g.connect(masterGain); src.start(t); src.stop(t+0.06);
+  }
+  function playPluck(freq,t,dur,vol){
+    if(!audioCtx) return;
+    const o=audioCtx.createOscillator(), o2=audioCtx.createOscillator(), g=audioCtx.createGain();
+    o.type='triangle'; o.frequency.value=freq;
+    o2.type='sine'; o2.frequency.value=freq*2;
+    g.gain.setValueAtTime(0.001,t); g.gain.exponentialRampToValueAtTime(vol||0.09,t+0.01); g.gain.exponentialRampToValueAtTime(0.001,t+dur);
+    o.connect(g); o2.connect(g); g.connect(masterGain);
+    o.start(t); o.stop(t+dur+0.02); o2.start(t); o2.stop(t+dur+0.02);
+  }
+  const BANDARI_BPM=108;
+  function scheduleBandariBar(startTime){
+    const step=60/BANDARI_BPM/2;
+    const kickSteps=[0,3,6], takSteps=[2,5,7];
+    for(let s=0;s<8;s++){
+      const t=startTime+s*step;
+      playShaker(t,0.045);
+      if(kickSteps.includes(s)) playKick(t);
+      if(takSteps.includes(s)) playTak(t);
+    }
+    const riffFreqs=[392.0,440.0,523.25,440.0];
+    const riffSteps=[0,2,4,6];
+    riffSteps.forEach((s,i)=>{ playPluck(riffFreqs[i], startTime+s*step, step*1.15, 0.075); });
+  }
+  function bandariLoop(){
+    if(!audioCtx || !bandariRunning) return;
+    const barDur=(60/BANDARI_BPM/2)*8;
+    const t0=audioCtx.currentTime+0.05;
+    scheduleBandariBar(t0);
+    bandariTimeoutId=setTimeout(bandariLoop, barDur*1000);
+  }
+  function startBandari(){ ensureAudio(); if(!audioCtx || bandariRunning) return; bandariRunning=true; bandariLoop(); }
+  function stopBandari(){ bandariRunning=false; if(bandariTimeoutId){ clearTimeout(bandariTimeoutId); bandariTimeoutId=null; } }
   muteBtn.addEventListener('click',()=>{
     muted=!muted;
     if(masterGain) masterGain.gain.value = muted?0:0.5;
@@ -531,7 +599,7 @@
   }
 
   function drawCharacter(g,c,expr,groundShadow){
-    const R=26*c.scale;
+    const R=34*c.scale;
     g.save(); g.translate(c.x,c.y);
     if(groundShadow){ g.fillStyle='rgba(20,10,10,.28)'; g.beginPath(); g.ellipse(0,R*2.35,R*0.85,R*0.22,0,0,Math.PI*2); g.fill(); }
     if(c.kind==='golden') drawGoldenAura(R, c.age||0);
@@ -856,7 +924,7 @@
     ctx.save();
     if(shakeMag>0.05) ctx.translate(rand(-shakeMag,shakeMag),rand(-shakeMag,shakeMag));
     ctx.clearRect(-6,-6,W+12,H+12);
-    ctx.drawImage(bgCanvas,0,0,W,H,0,0,W,H);
+    ctx.drawImage(bgCanvas,0,0,bgCanvas.width,bgCanvas.height,0,0,W,H);
     drawDynamicOverlay(now);
 
     const sorted=[...characters].sort((a,b)=>(a.y||0)-(b.y||0));
@@ -923,7 +991,7 @@
     const sorted=[...characters].sort((a,b)=>(b.y||0)-(a.y||0));
     for(const c of sorted){
       if(c.captured) continue;
-      const R=42*(c.scale||1);
+      const R=55*(c.scale||1);
       const by = (c.kind==='walker'||c.kind==='paparazzi') ? Math.sin((c.age*6)+c.bob)*4*c.scale : (c.kind==='powerup'?c.bob:0);
       const dx=x-c.x, dy=y-(c.y+by);
       if(dx*dx+dy*dy>R*R) continue;
@@ -1004,7 +1072,7 @@
   }
 
   async function endGame(){
-    running=false; stopAmbient();
+    running=false; stopAmbient(); stopBandari();
     const finalScore=score;
     let board=null;
     try{ board=await submitLeaderboard(nameInput.value.trim(),finalScore); }catch(e){}
@@ -1017,6 +1085,7 @@
     }
     cardContent.innerHTML =
       '<h2>وقت تموم شد! 💛</h2>'+
+      '<p style="margin-top:-4px;font-size:.7rem;color:#a3807c;">استودیو رونا</p>'+
       '<div class="rankTitle">'+rankTitle(finalScore)+'</div>'+
       '<div class="bigscore">'+finalScore+' امتیاز</div>'+
       '<p>رکورد: '+best+'</p>'+
@@ -1032,7 +1101,7 @@
   }
 
   function startGame(){
-    ensureAudio(); startAmbient();
+    ensureAudio(); startAmbient(); startBandari();
     startOverlay.style.display='none';
     resize();
     characters=[]; confetti=[]; score=0; scoreEl.textContent='0';
