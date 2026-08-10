@@ -270,7 +270,7 @@ SECTIONS.forEach((s, idx) => {
       s.items.map(t => '• ' + t).join('\n') +
       (s.example ? '\n\n' + s.example : '') +
       '\n\n— استودیو رونا';
-    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const blob = new Blob(['\ufeff' + text], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
