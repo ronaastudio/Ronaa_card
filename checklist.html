@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>چک‌لیست روز عروسی | استودیو رونا</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+:root{
+  --navy-deep:#0B1B33; --navy-mid:#132846; --navy-soft:#1B3358;
+  --gold:#C9A24B; --gold-bright:#E4C878; --cream:#F7F3EA;
+  --line: rgba(201,162,75,.35); --font:"Vazirmatn", sans-serif;
+}
+*{ box-sizing:border-box; margin:0; padding:0; }
+body{
+  font-family:var(--font); background:var(--navy-deep); color:var(--cream);
+  min-height:100vh; padding-bottom:60px;
+}
+.topbar{
+  position:sticky; top:0; z-index:20;
+  background:rgba(11,27,51,.92); backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--line);
+  padding:14px 20px; display:flex; align-items:center; justify-content:space-between;
+}
+.topbar a{ color:var(--cream); text-decoration:none; font-size:13px; display:flex; align-items:center; gap:6px; }
+.topbar h1{ font-size:15px; font-weight:700; }
+
+.hero-text{ text-align:center; padding:34px 22px 10px; max-width:520px; margin:0 auto; }
+.hero-text .eyebrow{ font-size:12px; letter-spacing:.3em; color:var(--gold-bright); margin-bottom:8px; }
+.hero-text h2{ font-size:22px; font-weight:800; margin-bottom:10px; }
+.hero-text p{ font-size:13px; color:rgba(247,243,234,.6); line-height:1.9; }
+
+.wrap{ max-width:560px; margin:0 auto; padding:20px; display:flex; flex-direction:column; gap:14px; }
+
+.card{
+  background:linear-gradient(180deg, var(--navy-soft), var(--navy-mid));
+  border:1px solid var(--line); border-radius:16px; overflow:hidden;
+  opacity:0; transform:translateY(18px);
+  transition:opacity .5s ease, transform .5s ease;
+}
+.card.in-view{ opacity:1; transform:none; }
+
+.card-head{
+  display:flex; align-items:center; gap:14px; padding:16px 18px; cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.card-icon{
+  width:42px; height:42px; border-radius:50%; flex-shrink:0;
+  background:rgba(201,162,75,.14); display:flex; align-items:center; justify-content:center;
+  color:var(--gold-bright); font-size:17px;
+}
+.card-title{ flex:1; font-size:14.5px; font-weight:700; }
+.card-chevron{ color:var(--gold); transition:transform .35s ease; font-size:13px; }
+.card.open .card-chevron{ transform:rotate(180deg); }
+
+.card-body-wrap{ max-height:0; overflow:hidden; transition:max-height .5s ease; }
+.card.open .card-body-wrap{ max-height:2000px; }
+
+.card-body{ padding:0 18px 18px; }
+.card-body ul{ list-style:none; display:flex; flex-direction:column; gap:9px; margin-bottom:14px; }
+.card-body ul li{
+  font-size:13.5px; line-height:1.9; color:rgba(247,243,234,.85);
+  padding-right:20px; position:relative;
+}
+.card-body ul li::before{
+  content:"◆"; position:absolute; right:0; top:2px; color:var(--gold); font-size:9px;
+}
+.card-body p{ font-size:13.5px; line-height:2; color:rgba(247,243,234,.85); margin-bottom:12px; }
+.card-body .example{
+  background:rgba(0,0,0,.18); border:1px solid var(--line); border-radius:10px;
+  padding:10px 14px; font-size:13px; direction:ltr; text-align:center; margin-bottom:12px; color:var(--gold-bright);
+}
+
+.dl-btn{
+  display:inline-flex; align-items:center; gap:8px;
+  background:none; border:1px solid var(--line); color:var(--gold-bright);
+  padding:9px 16px; border-radius:20px; font-family:var(--font); font-size:12.5px;
+  cursor:pointer; transition:border-color .2s ease, background .2s ease;
+}
+.dl-btn:hover{ border-color:var(--gold); background:rgba(201,162,75,.1); }
+
+@media (prefers-reduced-motion: reduce){
+  .card{ transition:none; opacity:1; transform:none; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+  <a href="index.html"><i class="fa-solid fa-arrow-right"></i> بازگشت به سایت</a>
+  <h1>چک‌لیست روز عروسی</h1>
+  <span style="width:16px"></span>
+</div>
+
+<div class="hero-text">
+  <p class="eyebrow">استودیو رونا</p>
+  <h2>راهنمای کامل روز عکاسی و جشن</h2>
+  <p>این راهنما رو با دقت بخونید — رعایتش کیفیت عکس‌ها و فیلم شما رو مستقیم بهتر می‌کنه. روی هر بخش بزنید تا باز بشه، و اگه خواستید هر بخشو جدا دانلود کنید.</p>
+</div>
+
+<div class="wrap" id="cardsWrap"></div>
+
+<script>
+const SECTIONS = [
+  {
+    icon: "fa-hard-drive",
+    title: "تحویل فیلم و هارد — مهم‌ترین نکته",
+    items: [
+      "حتماً یک هارد اکسترنال ۱ ترابایتی همراه خودتان بیاورید تا با اطمینان خاطر ۲ نسخه کپی از فیلم و عکس‌های شما موجود باشد.",
+      "هارد باید خالی باشد؛ آتلیه آن را فرمت می‌کند. در صورت تحویل ندادن هارد، هیچ‌کدام از مراحل تحویل فیلم و آلبوم انجام نمی‌گردد.",
+      "یک هفته قبل از مراسم، هارد بدون کیف و سیم، با برچسبِ اسم عروس و داماد، فامیل، شماره موبایل عروس (واتس‌آپ داشته باشد) و تاریخ مراسم تحویل داده شود.",
+      "اگر موزیک خاصی برای کلیپ‌ها مدنظرتان هست، روی هارد کپی شود.",
+      "تحویل فیلم و آلبوم در آتلیه رونا در صورت همکاری شما بین ۶ تا ۷ ماه می‌باشد."
+    ],
+    example: "مثال برچسب: موحد زیبا و فرزاد — ۰۹۲۱۱۰۲۷۶۴۷ — ۱۴۰۳/۱۰/۲۰"
+  },
+  {
+    icon: "fa-bag-shopping",
+    title: "وسایل ضروری روز عکاسی و جشن",
+    items: [
+      "حلقه‌ها و سرویس طلا",
+      "دکمه سردست داماد",
+      "ساعت‌ها",
+      "گیفت سفره عقد",
+      "کارت عروسی",
+      "عطر عروس و داماد",
+      "سنجاق قفلی، سوزن و نخ هم‌رنگ لباس عروس و داماد",
+      "چندتا گیره سر زنانه",
+      "تنقلات و آب معدنی",
+      "قیچی کوچک، دستمال مرطوب",
+      "لطفاً وسایل را شب قبل آماده کرده و داخل کیف بگذارید — خیلی موردی داشتیم که روز جشن پاپیون داماد گم شده، کراوات نیست، کلید ماشین عروس مفقود شده و مواردی از این دست."
+    ]
+  },
+  {
+    icon: "fa-person-dress",
+    title: "نکات آماده‌سازی عروس",
+    items: [
+      "عروس حتماً از لباس زیر سفید استفاده کند.",
+      "اگر عکاسی شما داخل عمارت است، عکاسی از مراحل آماده‌شدن شروع می‌شود؛ لباس عروس را در آرایشگاه نپوشید — لباس در لوکیشن، بعد از گرفتن عکس‌های آماده‌شدن، پوشیده می‌شود.",
+      "با مزون هماهنگ شود لباس شب قبل تحویل گرفته شود، یا اگر مزون همان روز تحویل می‌دهد، سر ساعت استارت عکاسی لباس باید در لوکیشن باشد.",
+      "اگر عکاسی شما داخل باغ است، لباس را در آرایشگاه بپوشید.",
+      "عروس حتماً یک جفت کفش راحت همراهش باشد.",
+      "یک جفت کفش سفید خوشگل و پاشنه‌بلند برای عکس و فیلم همراه داشته باشید.",
+      "لباس خواب و صندل (ربدوشامبر عروس) برای گرفتن تصاویر پریودینگ همراهتان باشد."
+    ]
+  },
+  {
+    icon: "fa-user-tie",
+    title: "نکات آماده‌سازی داماد",
+    items: [
+      "اگر کفش مشکی است، جوراب هم‌رنگ کفش بپوشید — جوراب سفید با کفش مشکی توی عکس‌ها زشت می‌شود.",
+      "اگر آرایشگاه می‌روید، از آرایشگر بخواهید کرم‌پودر یا هیچ ماده آرایشی روی پوست و صورتتان نزند؛ بعداً با فتوشاپ هم درست نمی‌شود. پاکسازی پوست داماد یک هفته قبل از مراسم انجام شود.",
+      "شب قبل زود بخوابید که فردا کسل نباشید.",
+      "لباس و کت‌وشلوار را داخل آرایشگاه بپوشید.",
+      "حتماً پول نقد همراهتان باشد؛ زمان رفتن به عابر بانک را نداریم و احتمال نیاز به آن هست."
+    ]
+  },
+  {
+    icon: "fa-clock",
+    title: "زمان‌بندی و نظم روز مراسم",
+    items: [
+      "داماد در ساعت مقرر، به همراه دسته‌گل و ماشین عروس (که قبلاً تحویل گرفته شده) درب آرایشگاه باشد.",
+      "هر نیم‌ساعت دیرآمدگی یعنی ۲ ساعت عقب‌افتادن زمان‌بندی ما — لطفاً دیر نکنید.",
+      "در روز مراسم و فرمالیته، برای ساقدوش‌ها، خودتان و تیم فیلم‌برداری ناهار تهیه کنید (لوکیشن‌های عکاسی خارج از شهرند و رستوران نزدیکی ندارند).",
+      "مادامی که عکاسی و تصویربرداری داریم، موبایل جواب ندهید."
+    ]
+  },
+  {
+    icon: "fa-map-location-dot",
+    title: "نکات لوکیشن، مهمان‌ها و هزینه‌ها",
+    items: [
+      "روز جشن و فرمالیته لطفاً از آوردن همراه خودداری کنید؛ ورود هر نفر به لوکیشن هزینه‌ی ورودی جداگانه دارد.",
+      "بعد از پایان عکاسی لطفاً لوکیشن را ترک کنید.",
+      "هزینه‌ی ورودی لوکیشن‌های انتخابی به عهده‌ی عروس و داماد است و جدا از قرارداد شما با استودیو می‌باشد.",
+      "انتخاب لوکیشن کاملاً سلیقه‌ای و به عهده‌ی خود عروس و داماد است.",
+      "لطفاً مبلغ مورد نظر را یک هفته قبل از مراسم واریز کنید تا زمان عکاسی شما قطعی و فیکس شود؛ بدون فیش پرداختی نمی‌توان به عمارت وارد شد.",
+      "اگر خودتان باغی برای عکاسی دارید، حتماً قبل از جشن باید آن را ببینیم.",
+      "۲ هفته قبل از مراسم برای هماهنگی‌های قطعی و تسویه‌حساب کامل، با هماهنگی به آتلیه مراجعه شود؛ هارد تحویل آتلیه و ورودی‌ها پرداخت شود.",
+      "اگر مایل به رزرو ماشین کلاسیک، موتور یا دیزاین خاصی هستید، حتماً از قبل با آتلیه مطرح کنید تا برایتان رزرو شود.",
+      "آتلیه رونا مدتیست آوردن عکس چاپ‌شده‌ی عروس و داماد داخل مراسم را از فرآیند کار حذف کرده؛ اگر تمایل دارید، حتماً قبل از روز مراسم به عکاس یادآوری کنید.",
+      "کمترین تعداد ماشین را به عمارت بیاورید؛ فقط ماشین عروس اجازه‌ی ورود به عمارت را دارد.",
+      "به هیچ عنوان حین عکاسی مشروبات الکلی مصرف نشود؛ در صورت مشاهده ادامه‌ی کار انجام نخواهد شد."
+    ]
+  },
+  {
+    icon: "fa-people-group",
+    title: "نکات مربوط به ساقدوش‌ها",
+    items: [
+      "فرد باردار، بچه‌دار (بچه کوچک) یا ساقدوشی با اختلاف سنی زیاد را به عنوان ساقدوش انتخاب نکنید.",
+      "شب قبل با همه‌ی ساقدوش‌ها وسایلی که قرار است بیاورند را چک کنید.",
+      "ساقدوش‌ها باید آماده سر لوکیشن حاضر شوند — داخل لوکیشن جایی برای آرایش نداریم.",
+      "در صورت تمایل برای ساقدوش‌های دختر دسته‌گل کوچک تهیه شود (واجب نیست).",
+      "ساقدوش‌های دختر نیازی به شینیون و آرایشگاه رفتن ندارند؛ موها را ساده اتو کنید و یک میکاپ معمولی کافیست.",
+      "شب قبل از عکاسی، لباس‌های ساقدوش‌های پسر کامل چک شود تا چیزی جا نماند.",
+      "لطفاً سر وقت در لوکیشن حاضر شوند؛ حین عکاسی استفاده از موبایل، لایو و استوری در لوکیشن ممنوع است."
+    ]
+  },
+  {
+    icon: "fa-video",
+    title: "نکات فیلم‌برداری مراسم",
+    items: [
+      "فیلم‌برداری محضر یا اتاق عقد فقط روند مراسم را پوشش می‌دهد — اگر پیش از مراسم تصویربرداری در باغ نداشته باشید، کلیپ دونفره هم نخواهید داشت.",
+      "پکیج فیلم‌برداری خانم‌ها دو دوربینه است؛ حذف یکی از دوربین‌ها می‌تواند تصاویر را کمی خسته‌کننده کند — پیشنهاد نمی‌شود.",
+      "دوربین‌ها امکان تعویض مداوم لنز در حین مراسم را ندارند؛ تشخیص واید یا کلوز بودن با خود فیلم‌بردار است.",
+      "فیلم‌بردار در حین کار نمی‌تواند دور استیج قدم بزند — جای ثابت لازم است چون قدم‌زدن باعث لرزش تصویر می‌شود؛ چرخش کار دستگاه کرین است.",
+      "فیلم‌بردار پیش از شروع، بهترین نقطه را برای فیلم‌برداری انتخاب می‌کند تا زوایای مشکل‌دار (مثل کنار بخاری یا میز) در کادر نباشند.",
+      "اگر پدر و مادر در فیلم دیده نمی‌شوند، معمولاً به این دلیل است که جلوی دوربین نمی‌آیند یا نمی‌رقصند — لطفاً پیش از مراسم به آن‌ها تذکر دهید.",
+      "دوربین جایی است که عروس و داماد هستند؛ به خانواده‌ها از قبل بگویید جلوی دوربین باشند. اگر سالخورده‌اند، حتماً پیش از مراسم به فیلم‌بردار معرفی شوند.",
+      "اگر دوست ندارید سر هر میز به مهمانان خوشامد بگویید، ممکن است بسیاری از مهمانان نرقصند و در فیلم نباشند.",
+      "اگر نمی‌خواهید کسی در فیلم مراسمتان باشد، لطفاً او را دعوت نکنید — بعداً حذف فرد از وسط رقص در میکس ممکن نیست. حذف افراد با ماسک هم ممکن نیست.",
+      "جمع‌کردن بچه‌های فامیل مسئولیت فیلم‌بردار نیست، بلکه بر عهده‌ی مادر بچه است.",
+      "بی‌نظمی در تالار، چیدمان، سفره و گل‌آرایی مربوط به آتلیه نیست.",
+      "اگر هنگام رقص نور تالار کم شود، فیلم هم تا حدی تاریک‌تر می‌شود — این کاملاً طبیعی است.",
+      "فیلم‌بردار فقط تابع صحبت عروس و داماد است؛ لطفاً به خانواده‌ها بگویید به فیلم‌بردار نگویند «فیلم نگیر».",
+      "اگر موزیک مراسم کم پخش شود یا خانواده‌ها مدام خواستار قطع آن باشند، تصاویر رقص کمتری خواهید داشت و ممکن است تایم فیلمتان کوتاه‌تر شود.",
+      "بارش باران یا برف، وزش باد، خرابی صدای بلندگوهای تالار و کمبود نور باغ یا تالار مربوط به آتلیه نیست.",
+      "اگر می‌خواهید کلیپتان با آهنگ خاصی باشد، حتماً روز مراسم با فیلم‌بردار هماهنگ کنید.",
+      "زیباترشدن کلیپ شما ۷۰ درصد به خودتان بستگی دارد — همکاری، به‌موقع‌بودن و داشتن حس خوب واقعی، حتی بهترین عکاس و فیلم‌بردار را هم به نتیجه‌ی بهتر می‌رساند."
+    ]
+  },
+  {
+    icon: "fa-address-book",
+    title: "راه‌های ارتباطی با ما",
+    items: [
+      "دایرکت اینستاگرام: studio.ronaa@",
+      "شماره تماس، واتساپ و تلگرام: ۰۹۲۱۱۰۲۷۶۴۷"
+    ]
+  }
+];
+
+const wrap = document.getElementById('cardsWrap');
+
+SECTIONS.forEach((s, idx) => {
+  const card = document.createElement('div');
+  card.className = 'card';
+
+  const itemsHtml = s.items.map(t => `<li>${t}</li>`).join('');
+  const exampleHtml = s.example ? `<div class="example">${s.example}</div>` : '';
+
+  card.innerHTML = `
+    <div class="card-head">
+      <div class="card-icon"><i class="fa-solid ${s.icon}"></i></div>
+      <div class="card-title">${s.title}</div>
+      <i class="fa-solid fa-chevron-down card-chevron"></i>
+    </div>
+    <div class="card-body-wrap">
+      <div class="card-body">
+        <ul>${itemsHtml}</ul>
+        ${exampleHtml}
+        <button class="dl-btn" data-idx="${idx}">
+          <i class="fa-solid fa-download"></i>
+          دانلود این بخش
+        </button>
+      </div>
+    </div>
+  `;
+
+  card.querySelector('.card-head').addEventListener('click', () => {
+    card.classList.toggle('open');
+  });
+
+  card.querySelector('.dl-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    const text = s.title + '\n' + '='.repeat(s.title.length) + '\n\n' +
+      s.items.map(t => '• ' + t).join('\n') +
+      (s.example ? '\n\n' + s.example : '') +
+      '\n\n— استودیو رونا';
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = s.title.replace(/[^a-zA-Z0-9آ-ی\s]/g,'').trim().slice(0,40) + '.txt';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 500);
+  });
+
+  wrap.appendChild(card);
+});
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in-view');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.card').forEach(c => observer.observe(c));
+</script>
+
+</body>
+</html>
