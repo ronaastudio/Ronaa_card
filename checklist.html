@@ -233,6 +233,162 @@ const SECTIONS = [
   }
 ];
 
+const CANVAS_WIDTH = 720;
+const PADDING = 44;
+const COLORS = {
+  bg1:'#0B1B33', bg2:'#132846', gold:'#C9A24B', goldBright:'#E4C878',
+  cream:'#F7F3EA', line:'rgba(201,162,75,0.35)'
+};
+const FONT_TITLE = '800 22px Vazirmatn, Tahoma, sans-serif';
+const FONT_ITEM  = '400 15px Vazirmatn, Tahoma, sans-serif';
+const FONT_EX    = '500 14px Vazirmatn, Tahoma, sans-serif';
+const FONT_COVER = '800 26px Vazirmatn, Tahoma, sans-serif';
+
+function wrapLines(ctx, text, maxWidth){
+  const words = text.split(' ');
+  let lines = [], current = '';
+  words.forEach(w => {
+    const test = current ? current + ' ' + w : w;
+    if (ctx.measureText(test).width > maxWidth && current) {
+      lines.push(current);
+      current = w;
+    } else {
+      current = test;
+    }
+  });
+  if (current) lines.push(current);
+  return lines;
+}
+
+function roundRect(ctx, x, y, w, h, r){
+  ctx.beginPath();
+  ctx.moveTo(x+r, y);
+  ctx.arcTo(x+w, y, x+w, y+h, r);
+  ctx.arcTo(x+w, y+h, x, y+h, r);
+  ctx.arcTo(x, y+h, x, y, r);
+  ctx.arcTo(x, y, x+w, y, r);
+  ctx.closePath();
+}
+
+function layoutSection(mctx, section, maxWidth){
+  const cmds = [];
+  let h = 0;
+  mctx.font = FONT_TITLE;
+  wrapLines(mctx, section.title, maxWidth).forEach(line => {
+    h += 30; cmds.push({ type:'title', text:line, y:h });
+  });
+  h += 10;
+  cmds.push({ type:'divider', y:h });
+  h += 26;
+  mctx.font = FONT_ITEM;
+  section.items.forEach(item => {
+    wrapLines(mctx, '◆  ' + item, maxWidth - 6).forEach(line => {
+      h += 25; cmds.push({ type:'item', text:line, y:h });
+    });
+    h += 6;
+  });
+  if (section.example){
+    h += 10;
+    cmds.push({ type:'example', text:section.example, boxTop:h });
+    h += 56;
+  }
+  h += 26;
+  return { cmds, height:h };
+}
+
+async function buildCanvasForSections(sections, coverTitle){
+  await document.fonts.ready;
+  const maxWidth = CANVAS_WIDTH - PADDING*2;
+
+  const tmp = document.createElement('canvas');
+  tmp.width = CANVAS_WIDTH; tmp.height = 10;
+  const mctx = tmp.getContext('2d');
+  mctx.direction = 'rtl'; mctx.textAlign = 'right';
+
+  let totalHeight = PADDING;
+  let coverLines = [];
+  if (coverTitle){
+    mctx.font = FONT_COVER;
+    coverLines = wrapLines(mctx, coverTitle, maxWidth);
+    totalHeight += coverLines.length * 34 + 20;
+  }
+
+  const layouts = sections.map(s => {
+    const startY = totalHeight;
+    const { cmds, height } = layoutSection(mctx, s, maxWidth);
+    totalHeight += height;
+    return { cmds, startY };
+  });
+  totalHeight += PADDING + 30;
+
+  const canvas = document.createElement('canvas');
+  canvas.width = CANVAS_WIDTH;
+  canvas.height = Math.ceil(totalHeight);
+  const ctx = canvas.getContext('2d');
+  ctx.direction = 'rtl'; ctx.textAlign = 'right';
+
+  const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  grad.addColorStop(0, COLORS.bg2); grad.addColorStop(1, COLORS.bg1);
+  ctx.fillStyle = grad; ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = COLORS.gold; ctx.fillRect(0, 0, canvas.width, 6);
+
+  let y = PADDING;
+  if (coverTitle){
+    ctx.font = FONT_COVER; ctx.fillStyle = COLORS.goldBright;
+    coverLines.forEach(line => { y += 34; ctx.fillText(line, CANVAS_WIDTH - PADDING, y); });
+  }
+
+  layouts.forEach(({ cmds, startY }) => {
+    cmds.forEach(cmd => {
+      if (cmd.type === 'title'){
+        ctx.font = FONT_TITLE; ctx.fillStyle = COLORS.cream;
+        ctx.fillText(cmd.text, CANVAS_WIDTH - PADDING, startY + cmd.y);
+      } else if (cmd.type === 'divider'){
+        ctx.strokeStyle = COLORS.line; ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(PADDING, startY + cmd.y);
+        ctx.lineTo(CANVAS_WIDTH - PADDING, startY + cmd.y);
+        ctx.stroke();
+      } else if (cmd.type === 'item'){
+        ctx.font = FONT_ITEM; ctx.fillStyle = 'rgba(247,243,234,.88)';
+        ctx.fillText(cmd.text, CANVAS_WIDTH - PADDING, startY + cmd.y);
+      } else if (cmd.type === 'example'){
+        const boxTop = startY + cmd.boxTop;
+        ctx.fillStyle = 'rgba(0,0,0,.22)';
+        roundRect(ctx, PADDING, boxTop, maxWidth, 46, 10); ctx.fill();
+        ctx.strokeStyle = COLORS.line;
+        roundRect(ctx, PADDING, boxTop, maxWidth, 46, 10); ctx.stroke();
+        ctx.direction = 'ltr'; ctx.textAlign = 'center';
+        ctx.fillStyle = COLORS.goldBright; ctx.font = FONT_EX;
+        ctx.fillText(cmd.text, CANVAS_WIDTH/2, boxTop + 29);
+        ctx.direction = 'rtl'; ctx.textAlign = 'right';
+      }
+    });
+  });
+
+  ctx.direction = 'rtl'; ctx.textAlign = 'center';
+  ctx.font = '500 13px Vazirmatn, Tahoma, sans-serif';
+  ctx.fillStyle = 'rgba(247,243,234,.5)';
+  ctx.fillText('استودیو رونا', CANVAS_WIDTH/2, canvas.height - 18);
+
+  return canvas;
+}
+
+function downloadCanvasAsImage(canvas, filename){
+  canvas.toBlob(blob => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 500);
+  }, 'image/png');
+}
+
+function safeName(text){
+  return text.replace(/[^a-zA-Z0-9آ-ی\s]/g, '').trim().slice(0, 40);
+}
+
 const wrap = document.getElementById('cardsWrap');
 
 SECTIONS.forEach((s, idx) => {
@@ -253,8 +409,8 @@ SECTIONS.forEach((s, idx) => {
         <ul>${itemsHtml}</ul>
         ${exampleHtml}
         <button class="dl-btn" data-idx="${idx}">
-          <i class="fa-solid fa-download"></i>
-          دانلود این بخش
+          <i class="fa-solid fa-image"></i>
+          دانلود این بخش (عکس)
         </button>
       </div>
     </div>
@@ -264,22 +420,37 @@ SECTIONS.forEach((s, idx) => {
     card.classList.toggle('open');
   });
 
-  card.querySelector('.dl-btn').addEventListener('click', (e) => {
+  card.querySelector('.dl-btn').addEventListener('click', async (e) => {
     e.stopPropagation();
-    const text = s.title + '\n' + '='.repeat(s.title.length) + '\n\n' +
-      s.items.map(t => '• ' + t).join('\n') +
-      (s.example ? '\n\n' + s.example : '') +
-      '\n\n— استودیو رونا';
-    const blob = new Blob(['\ufeff' + text], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = s.title.replace(/[^a-zA-Z0-9آ-ی\s]/g,'').trim().slice(0,40) + '.txt';
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 500);
+    const btn = e.currentTarget;
+    const originalHtml = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> در حال ساخت...';
+    const canvas = await buildCanvasForSections([s], null);
+    downloadCanvasAsImage(canvas, safeName(s.title) + '.png');
+    btn.innerHTML = originalHtml;
   });
 
   wrap.appendChild(card);
+});
+
+const downloadAllWrap = document.createElement('div');
+downloadAllWrap.style.textAlign = 'center';
+downloadAllWrap.style.marginTop = '10px';
+downloadAllWrap.innerHTML = `
+  <button class="dl-btn" id="downloadAllBtn" style="padding:14px 26px; font-size:14px;">
+    <i class="fa-solid fa-images"></i>
+    دانلود همه‌ی نکات (یک عکس کامل)
+  </button>
+`;
+wrap.appendChild(downloadAllWrap);
+
+document.getElementById('downloadAllBtn').addEventListener('click', async (e) => {
+  const btn = e.currentTarget;
+  const originalHtml = btn.innerHTML;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> در حال ساخت عکس کامل...';
+  const canvas = await buildCanvasForSections(SECTIONS, 'چک‌لیست کامل روز عروسی');
+  downloadCanvasAsImage(canvas, 'چک‌لیست-روز-عروسی-رونا.png');
+  btn.innerHTML = originalHtml;
 });
 
 const observer = new IntersectionObserver((entries) => {
