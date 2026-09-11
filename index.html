@@ -45,14 +45,14 @@
 
   <div class="buttons">
 
+    <button type="button" class="btn btn-primary" id="openGamesModal">
+      <i class="fa-solid fa-gamepad"></i>
+      بازی کنیم
+    </button>
+
     <a href="checklist.html" class="btn">
       <i class="fa-solid fa-list-check"></i>
       چک‌لیست روز عروسی
-    </a>
-
-    <a href="game.html" class="btn btn-primary">
-      <i class="fa-solid fa-dice"></i>
-      بازی کنیم
     </a>
 
     <a href="tel:09211027647" class="btn btn-primary">
@@ -168,6 +168,31 @@
 </footer>
 
 <!-- ===== ROUTE MODAL ===== -->
+<!-- ===== GAMES MODAL ===== -->
+<div class="modal-overlay" id="gamesModal">
+  <div class="modal-box">
+
+    <button type="button" class="modal-close" id="closeGamesModal" aria-label="بستن">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+
+    <h3 class="modal-title">کدوم بازی رو دوست داری؟</h3>
+
+    <p class="modal-desc">دو تا بازی کوتاه و سرگرم‌کننده برات آماده کردیم.</p>
+
+    <a href="flappy-camera.html" class="btn btn-gold" style="margin-bottom:12px;">
+      <i class="fa-solid fa-camera-retro"></i>
+      پرواز دوربین (بازی سریع)
+    </a>
+
+    <a href="game.html" class="btn btn-gold">
+      <i class="fa-solid fa-dice"></i>
+      شکار لحظه‌ها (بازی مهمونا)
+    </a>
+
+  </div>
+</div>
+
 <div class="modal-overlay" id="routeModal">
   <div class="modal-box">
 
@@ -186,7 +211,7 @@
       </video>
     </div>
 
-    <a href="https://maps.app.goo.gl/y1Byca2mtJ7fG8ux5" target="_blank" rel="noopener" class="btn btn-gold route-map-btn">
+    <a href="https://www.google.com/maps/place/%D8%A8%D8%B1%D9%88%D8%AC%D9%86%D8%8C+%D8%AE%DB%8C%D8%A7%D8%A8%D8%A7%D9%86+%D8%AF%D9%81%D8%AA%D8%B1%DB%8C%D8%8C+X79P%2BPX4+%D8%A7%D8%B3%D8%AA%D9%88%D8%AF%DB%8C%D9%88+%D8%B1%D9%88%D9%86%D8%A7%E2%80%AD/data=!4m2!3m1!1s0x3fbeab0063428955:0xb2b79745c56ce4aa" target="_blank" rel="noopener" class="btn btn-gold route-map-btn">
       <i class="fa-solid fa-map-location-dot"></i>
       لینک لوکیشن روی نقشه
     </a>
